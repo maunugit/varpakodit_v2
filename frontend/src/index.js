@@ -17,7 +17,10 @@ root.render(
     <Auth0Provider
       domain={domain}
       clientId={clientId}
-      redirectUri={window.location.origin}
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+      }}
+      cacheLocation="localstorage"  // Use localStorage for caching tokens
     >
       <App />
     </Auth0Provider>

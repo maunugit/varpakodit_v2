@@ -23,7 +23,7 @@ const MainScreen = () => {
       </Row>
       <Row className="mt-3">
         <Col>
-          <Button variant="secondary" size="lg" disabled>
+          <Button variant="primary" size="lg" onClick={() => navigate('/chat')}>
             Talk to a Virtual Assistant
           </Button>
         </Col>

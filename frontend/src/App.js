@@ -6,6 +6,7 @@ import LogoutButton from './LogoutButton';
 import Profile from './Profile';
 import DailyDataForm from './DailyDataForm';
 import MainScreen from './MainScreen';
+import Chat from './Chat';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={isAuthenticated ? <MainScreen /> : <Profile />} />
         <Route path="/daily-data" element={<DailyDataForm />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </Router>
   );
