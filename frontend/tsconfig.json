@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "jsx": "preserve",
+      "strict": true,
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/MainScreen.js"],
+    "exclude": ["node_modules"]
+  }
+  

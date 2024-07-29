@@ -1,48 +1,48 @@
 // src/MainScreen.js
 import React from 'react';
-import { Button, Container, Row, Col } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import styled from 'styled-components';
+import Sidebar from './Sidebar';
+
+// Styled components
+const MainContainer = styled.div`
+  display: flex;
+  height: 100vh;
+  background-color: #f0f2f5;
+  font-family: 'Arial', sans-serif;
+`;
+
+const ContentContainer = styled(Container)`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+`;
+
+const WelcomeMessage = styled.h1`
+  font-size: 36px;
+  color: #343a40;
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
+const SubMessage = styled.p`
+  font-size: 18px;
+  color: #6c757d;
+  text-align: center;
+`;
 
 const MainScreen = () => {
-  const navigate = useNavigate();
-
   return (
-    <Container className="text-center mt-5">
-      <Row>
-        <Col>
-          <h1>Welcome!</h1>
-          <p>Select an option below to get started:</p>
-        </Col>
-      </Row>
-      <Row className="mt-4">
-        <Col>
-          <Button variant="primary" size="lg" onClick={() => navigate('/daily-data')}>
-            Fill Daily Data
-          </Button>
-        </Col>
-      </Row>
-      <Row className="mt-3">
-        <Col>
-          <Button variant="primary" size="lg" onClick={() => navigate('/chat')}>
-            Talk to a Virtual Assistant
-          </Button>
-        </Col>
-      </Row>
-      <Row className="mt-3">
-        <Col>
-          <Button variant="secondary" size="lg" disabled>
-            Fill Monthly Questionnaire
-          </Button>
-        </Col>
-      </Row>
-      <Row className="mt-3">
-        <Col>
-          <Button variant="secondary" size="lg" disabled>
-            Make a Weekly Plan
-          </Button>
-        </Col>
-      </Row>
-    </Container>
+    <MainContainer>
+      <Sidebar />
+      <ContentContainer>
+        <WelcomeMessage>Welcome!</WelcomeMessage>
+        <SubMessage>Select from the sidebar to get started:</SubMessage>
+      </ContentContainer>
+    </MainContainer>
   );
 };
 

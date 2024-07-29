@@ -1,13 +1,96 @@
-// src/components/DailyDataForm.js
+// src/DailyDataForm.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Form, Container } from 'react-bootstrap';
+import styled from 'styled-components';
+
+const FormContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f2f5;
+  font-family: 'Arial', sans-serif;
+`;
+
+const StyledForm = styled.form`
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 20px;
+`;
+
+const FormLabel = styled.label`
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333333;
+`;
+
+const FormControl = styled.select`
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #495057;
+  background-color: #ffffff;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+`;
+
+const FormControlText = styled.input`
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #495057;
+  background-color: #ffffff;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+`;
+
+const SubmitButton = styled.button`
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
 
 const DailyDataForm = () => {
   const { user } = useAuth0();
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     sleep: '',
     eating: '',
@@ -28,7 +111,7 @@ const DailyDataForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
+    try { 
       await axios.post('http://localhost:5000/api/dailyData', {
         userId: user.sub,
         ...formData,
@@ -41,77 +124,71 @@ const DailyDataForm = () => {
   };
 
   return (
-    <Container>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="sleep">
-          <Form.Label>Sleep</Form.Label>
-          <Form.Control as="select" name="sleep" value={formData.sleep} onChange={handleChange}>
+    <FormContainer>
+      <StyledForm onSubmit={handleSubmit}>
+        <FormGroup>
+          <FormLabel>Sleep</FormLabel>
+          <FormControl name="sleep" value={formData.sleep} onChange={handleChange}>
             <option value="">Select</option>
             <option value="bad">Bad</option>
             <option value="okay">Okay</option>
             <option value="good">Good</option>
-          </Form.Control>
-        </Form.Group>
-        <br />
-        <Form.Group controlId="eating">
-          <Form.Label>Eating</Form.Label>
-          <Form.Control as="select" name="eating" value={formData.eating} onChange={handleChange}>
+          </FormControl>
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>Eating</FormLabel>
+          <FormControl name="eating" value={formData.eating} onChange={handleChange}>
             <option value="">Select</option>
             <option value="bad">Bad</option>
             <option value="okay">Okay</option>
             <option value="good">Good</option>
-          </Form.Control>
-        </Form.Group>
-        <br />
-        <Form.Group controlId="hobbies">
-          <Form.Label>Hobbies</Form.Label>
-          <Form.Control type="text" name="hobbies" value={formData.hobbies} onChange={handleChange} />
-        </Form.Group>
-        <br />
-        <Form.Group controlId="school">
-          <Form.Label>School</Form.Label>
-          <Form.Control as="select" name="school" value={formData.school} onChange={handleChange}>
+          </FormControl>
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>Hobbies</FormLabel>
+          <FormControlText type="text" name="hobbies" value={formData.hobbies} onChange={handleChange} />
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>School</FormLabel>
+          <FormControl name="school" value={formData.school} onChange={handleChange}>
             <option value="">Select</option>
             <option value="bad">Bad</option>
             <option value="okay">Okay</option>
             <option value="good">Good</option>
-          </Form.Control>
-        </Form.Group>
-        <br />
-        <Form.Group controlId="sports">
-          <Form.Label>Sports</Form.Label>
-          <Form.Control as="select" name="sports" value={formData.sports} onChange={handleChange}>
+          </FormControl>
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>Sports</FormLabel>
+          <FormControl name="sports" value={formData.sports} onChange={handleChange}>
             <option value="">Select</option>
             <option value="bad">Bad</option>
             <option value="okay">Okay</option>
             <option value="good">Good</option>
-          </Form.Control>
-        </Form.Group>
-        <br />
-        <Form.Group controlId="friendsFamily">
-          <Form.Label>Friends and Family</Form.Label>
-          <Form.Control as="select" name="friendsFamily" value={formData.friendsFamily} onChange={handleChange}>
+          </FormControl>
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>Friends and Family</FormLabel>
+          <FormControl name="friendsFamily" value={formData.friendsFamily} onChange={handleChange}>
             <option value="">Select</option>
             <option value="bad">Bad</option>
             <option value="okay">Okay</option>
             <option value="good">Good</option>
-          </Form.Control>
-        </Form.Group>
-        <br />
-        <Form.Group controlId="generalMood">
-          <Form.Label>General Mood</Form.Label>
-          <Form.Control as="select" name="generalMood" value={formData.generalMood} onChange={handleChange}>
+          </FormControl>
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>General Mood</FormLabel>
+          <FormControl name="generalMood" value={formData.generalMood} onChange={handleChange}>
             <option value="">Select</option>
             <option value="bad">Bad</option>
             <option value="okay">Okay</option>
             <option value="good">Good</option>
-          </Form.Control>
-        </Form.Group>
-        <br />
-        <Button variant="primary" type="submit">Submit</Button>
-        <Button variant="secondary" className="ml-3" onClick={() => navigate('/')}>Back to Main Menu</Button>
-      </Form>
-    </Container>
+          </FormControl>
+        </FormGroup>
+        <ButtonContainer>
+          <SubmitButton type="submit">Submit</SubmitButton>
+        </ButtonContainer>
+      </StyledForm>
+    </FormContainer>
   );
 };
 

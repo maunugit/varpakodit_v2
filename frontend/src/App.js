@@ -4,9 +4,13 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
 import Profile from './Profile';
+import Dashboard from './Dashboard'
 import DailyDataForm from './DailyDataForm';
 import MainScreen from './MainScreen';
 import Chat from './Chat';
+import Layout from './Layout';
+import Calendar from './Calendar';
+import Report from './Report';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const App = () => {
@@ -20,17 +24,15 @@ const App = () => {
       <div>
         <LoginButton />
         <LogoutButton />
-        {isAuthenticated && <Profile />}
-        {/* {isAuthenticated}
-        <Routes>
-          <Route path="/" element={<Profile />} />
-          <Route path="/daily-data" element={<DailyDataForm />} />
-        </Routes> */}
       </div>
       <Routes>
-        <Route path="/" element={isAuthenticated ? <MainScreen /> : <Profile />} />
-        <Route path="/daily-data" element={<DailyDataForm />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/" element={isAuthenticated ? <Layout><MainScreen /></Layout> : <Profile />} />
+        <Route path="/daily-data" element={<Layout><DailyDataForm /></Layout>} />
+        <Route path="/chat" element={<Layout><Chat /></Layout>} />
+        <Route path="/profile" element={<Layout><Profile /></Layout>} />
+        <Route path="/dashboard" element={<Layout>< Dashboard/></Layout>} />
+        <Route path="/calendar" element={<Layout><Calendar/></Layout>} />
+        <Route path="/report" element={<Layout><Report/></Layout>} />
       </Routes>
     </Router>
   );
