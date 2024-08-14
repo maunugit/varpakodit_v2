@@ -1,5 +1,5 @@
 // src/components/Chat.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { sendMessage, startNewThread } from './apiService';
 import styled from 'styled-components';
 
@@ -32,7 +32,7 @@ const MessagesList = styled.div`
 const MessageContainer = styled.div`
   display: flex;
   margin-bottom: 20px;
-  align-items: flex-end;
+  align-items: flex-start;  /* or flex-end */
   ${(props) => (props.role === 'user' ? 'flex-direction: row-reverse;' : 'flex-direction: row;')}
 `;
 
@@ -47,10 +47,18 @@ const Avatar = styled.div`
   font-size: 20px;
   color: white;
   margin: 0 10px;
+  flex-shrink: 0;
+`;
+
+const MessageContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  ${(props) => (props.role === 'user' ? 'align-items: flex-end;' : 'align-items: flex-start;')}
+  max-width: 70%;
 `;
 
 const MessageBubble = styled.div`
-  max-width: 60%;
+  max-width: 100%;
   padding: 10px 15px;
   border-radius: 20px;
   background-color: ${(props) => (props.role === 'user' ? '#007bff' : '#e9ecef')};
@@ -64,7 +72,7 @@ const Timestamp = styled.div`
   font-size: 12px;
   color: #6c757d;
   margin-top: 5px;
-  text-align: ${(props) => (props.role === 'user' ? 'right' : 'left')};
+  ${'' /* text-align: ${(props) => (props.role === 'user' ? 'right' : 'left')}; */}
 `;
 
 const FormGroup = styled.div`
@@ -118,6 +126,7 @@ const Chat = () => {
   const [input, setInput] = useState('');
   const [threadId, setThreadId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const initializeThread = async () => {
@@ -131,6 +140,20 @@ const Chat = () => {
 
     initializeThread();
   }, []);
+
+  useEffect(() => {
+    // this is for focusing on the input field after each message is sent
+    if (inputRef.current && !loading) {
+      inputRef.current.focus();
+    }
+  }, [messages, loading]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
@@ -157,20 +180,24 @@ const Chat = () => {
           {messages.map((msg, index) => (
             <MessageContainer key={index} role={msg.role}>
               <Avatar>{msg.role === 'user' ? 'U' : 'A'}</Avatar>
+              <MessageContent role={msg.role}>
               <div>
                 <MessageBubble role={msg.role}>{msg.content}</MessageBubble>
                 <Timestamp role={msg.role}>{msg.timestamp}</Timestamp>
               </div>
+              </MessageContent>
             </MessageContainer>
           ))}
         </MessagesList>
         <FormGroup>
           <FormControl
+            ref={inputRef}
             type="text"
             placeholder="Type your message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            disabled={loading}
+            onKeyDown={handleKeyDown}
+            
           />
           <SendButton onClick={handleSendMessage} disabled={loading}>
             {loading ? 'Sending...' : 'Send'}

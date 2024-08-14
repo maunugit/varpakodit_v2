@@ -4,14 +4,23 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const OpenAI = require('openai');
+const dailyDataRoutes = require('./routes/dailyData');
+const profileRoutes = require('./routes/profile');
+const userRoutes = require('./routes/users');
 
 dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
+app.use('/api/dailyData', dailyDataRoutes); 
+app.use('/api/profile', profileRoutes);
+app.use('/api/users', userRoutes);
 
-mongoose.connect(process.env.MONGO_URI, {
+
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => console.log('MongoDB connected'))

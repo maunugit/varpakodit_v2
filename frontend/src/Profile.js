@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'styled-components';
 import Sidebar from './Sidebar';
+import axios from 'axios';
 
 // Styled components
 const ProfileContainer = styled.div`
@@ -69,48 +70,109 @@ const SaveButton = styled.button`
 `;
 
 const Profile = () => {
-  const { user, isAuthenticated } = useAuth0();
-  const [age, setAge] = useState('');
-  const [weight, setWeight] = useState('');
-  const [bloodType, setBloodType] = useState('');
-  const [height, setHeight] = useState('');
-  const [hobbies, setHobbies] = useState('');
-  const [favoriteSubject, setFavoriteSubject] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [bio, setBio] = useState('');
-  const [profileImage, setProfileImage] = useState(user.picture);
+  const { user, isAuthenticated  } = useAuth0();
+  const [profileData, setProfileData] = useState({
+    age: '',
+    weight: '',
+    bloodType: '',
+    height: '',
+    hobbies: '',
+    favoriteSubject: '',
+    phoneNumber: '',
+    bio: '',
+    image: null,
+  });
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      if (isAuthenticated && user) {
+        try {
+          const response = await axios.get(`http://localhost:5000/api/profile/${user.sub}`);
+          if (response.data) {
+            setProfileData(prevData => ({
+              ...prevData,
+              ...response.data,
+              image: response.data.image || user.picture
+            }));
+          }
+        } catch (error) {
+          console.error('Error fetching profile data:', error);
+        }
+      }
+    };
+
+    fetchProfileData();
+  }, [isAuthenticated, user]);
+  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => setProfileImage(reader.result);
+      reader.onload = () => setProfileData(prevData => ({
+        ...prevData,
+        image: reader.result
+      }));
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSave = () => {
-    // Logic to save the updated profile data
-    console.log('Profile updated:', { 
-      age, 
-      weight, 
-      bloodType, 
-      height, 
-      hobbies, 
-      favoriteSubject, 
-      phoneNumber, 
-      bio, 
-      profileImage 
-    });
-  };
+  // const handleSave = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     await axios.post('http://localhost:5000/api/profile', {
+  //       userId: user.sub,
+  //       ...profileData,
+  //     });
+  //     alert('Profile updated successfully');
+  //   } catch (error) {
+  //     console.error('Error updating profile:', error);
+  //     alert('Failed to update profile');
+  //   }
+  // };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      console.log('Sending profile data:', { userId: user.sub, ...profileData });
+      const response = await axios.post('http://localhost:5000/api/profile', {
+        userId: user.sub,
+        ...profileData,
+      });
+      console.log('Server response:', response.data);
+      alert('Profile updated successfully');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Error data:', error.response.data);
+        console.error('Error status:', error.response.status);
+        console.error('Error headers:', error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('Error request:', error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error message:', error.message);
+      }
+      alert('Failed to update profile');
+    }
+  };  
 
   return (
-    isAuthenticated && (
+    // <form onSubmit={handleSubmit}>
       <ProfileContainer>
         <Sidebar />
         <ProfileContent>
           <label htmlFor="profile-image-upload">
-            <ProfileImage src={profileImage} alt={user.name} />
+            <ProfileImage src={profileData.image || user.picture} alt={profileData.name} />
           </label>
           <input
             id="profile-image-upload"
@@ -121,55 +183,65 @@ const Profile = () => {
           />
           <Input
             type="number"
+            name="age"
             placeholder="Age"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
+            value={profileData.age}
+            onChange={handleInputChange}
           />
           <Input
             type="number"
+            name="weight"
             placeholder="Weight (kg)"
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
+            value={profileData.weight}
+            onChange={handleInputChange}
           />
           <Input
             type="text"
+            name="bloodType"
             placeholder="Blood Type"
-            value={bloodType}
-            onChange={(e) => setBloodType(e.target.value)}
+            value={profileData.bloodType}
+            onChange={handleInputChange}
           />
           <Input
             type="number"
+            name="height"
             placeholder="Height (cm)"
-            value={height}
-            onChange={(e) => setHeight(e.target.value)}
+            value={profileData.height}
+            onChange={handleInputChange}
           />
           <Input
             type="text"
+            name="hobbies"
             placeholder="Hobbies"
-            value={hobbies}
-            onChange={(e) => setHobbies(e.target.value)}
+            value={profileData.hobbies}
+            onChange={handleInputChange}
           />
           <Input
             type="text"
+            name="favoriteSubject"
             placeholder="Favorite Subject"
-            value={favoriteSubject}
-            onChange={(e) => setFavoriteSubject(e.target.value)}
+            value={profileData.favoriteSubject}
+            onChange={handleInputChange}
           />
-          <Input
+           <Input
             type="tel"
+            name="phoneNumber"
             placeholder="Phone Number"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            value={profileData.phoneNumber}
+            onChange={handleInputChange}
           />
           <TextArea
+            name="bio"
             placeholder="Short Bio"
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
+            value={profileData.bio}
+            onChange={handleInputChange}
           />
-          <SaveButton onClick={handleSave}>Save Changes</SaveButton>
+          <SaveButton onClick={handleSubmit}>Save Changes</SaveButton>
+          {/* <SaveButton>Save Changes</SaveButton> */}
         </ProfileContent>
       </ProfileContainer>
-    )
+      // </form>
+    
   );
 };
 
