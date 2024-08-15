@@ -24,3 +24,18 @@ export const startNewThread = async () => {
         throw error;
     }
 };
+
+export const fetchDashboardData = async (getToken) => {
+    try {
+      const token = await getToken();
+      const response = await api.get('/api/dashboard', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      throw error;
+    }
+  };
