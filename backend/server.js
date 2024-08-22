@@ -7,7 +7,8 @@ const OpenAI = require('openai');
 const dailyDataRoutes = require('./routes/dailyData');
 const profileRoutes = require('./routes/profile');
 const userRoutes = require('./routes/users');
-const { auth } = require('express-oauth2-jwt-bearer');
+const dashboardRoutes = require('./routes/dashboard');
+
 
 dotenv.config();
 
@@ -19,12 +20,7 @@ app.use(express.json());
 app.use('/api/dailyData', dailyDataRoutes); 
 app.use('/api/profile', profileRoutes);
 app.use('/api/users', userRoutes);
-
-// auth0 middleware backend setup
-const checkJwt = auth({
-  audience: process.env.AUTH0_CLIENT_ID,
-  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}/`,
-});
+app.use('/api/dashboard', dashboardRoutes);
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,

@@ -3,6 +3,7 @@ import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import styled from 'styled-components';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const localizer = momentLocalizer(moment);
 
@@ -129,26 +130,40 @@ const Calendar = () => {
   const [end, setEnd] = useState('');
   const [color, setColor] = useState('#03dac6');
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth0();
 
   useEffect(() => {
-    const dummyEvents = [
-      {
-        id: 1,
-        title: 'Study for Math Exam',
-        start: new Date(2024, 6, 30, 10, 0),
-        end: new Date(2024, 6, 30, 12, 0),
-        color: '#03dac6',
-      },
-      {
-        id: 2,
-        title: 'Group Project Meeting',
-        start: new Date(2024, 6, 31, 14, 0),
-        end: new Date(2024, 6, 31, 16, 0),
-        color: '#bb86fc',
-      },
-    ];
-    setEvents(dummyEvents);
-  }, []);
+    if (user) {
+      const storedEvents = localStorage.getItem(`calendarEvents_${user.sub}`);
+      if (storedEvents) {
+        setEvents(JSON.parse(storedEvents).map(event => ({
+          ...event,
+          start: new Date(event.start),
+          end: new Date(event.end)
+        })));
+      }
+    }
+  }, [user]);
+  // dummy events for the calendar overlay
+  // useEffect(() => {
+  //   const dummyEvents = [
+  //     {
+  //       id: 1,
+  //       title: 'Study for Math Exam',
+  //       start: new Date(2024, 6, 30, 10, 0),
+  //       end: new Date(2024, 6, 30, 12, 0),
+  //       color: '#03dac6',
+  //     },
+  //     {
+  //       id: 2,
+  //       title: 'Group Project Meeting',
+  //       start: new Date(2024, 6, 31, 14, 0),
+  //       end: new Date(2024, 6, 31, 16, 0),
+  //       color: '#bb86fc',
+  //     },
+  //   ];
+  //   setEvents(dummyEvents);
+  // }, []);
 
   const handleAddEvent = async (e) => {
     e.preventDefault();
@@ -157,13 +172,17 @@ const Calendar = () => {
     setLoading(true);
     try {
       const newEvent = {
-        id: events.length + 1,
+        // id: events.length + 1,
+        id: Date.now(),
         title,
         start: new Date(start),
         end: new Date(end),
         color,
       };
-      setEvents([...events, newEvent]);
+      const updatedEvents = [...events, newEvent];
+      // setEvents([...events, newEvent]);
+      setEvents(updatedEvents);
+      localStorage.setItem(`calendarEvents_${user.sub}`, JSON.stringify(updatedEvents)); //save events to localStorage, can be changed to save to MongoDB for example
       setTitle('');
       setStart('');
       setEnd('');
@@ -174,9 +193,17 @@ const Calendar = () => {
     setLoading(false);
   };
 
+  const handleMarkDone = (eventId) => {
+    const updatedEvents = events.map(event =>
+      event.id === eventId ? { ...event, isDone: true } : event
+    );
+    setEvents(updatedEvents);
+    localStorage.setItem(`calendarEvents_${user.sub}`, JSON.stringify(updatedEvents));
+  }
+
   const eventStyleGetter = (event, start, end, isSelected) => {
     const style = {
-      backgroundColor: event.color || '#03dac6',
+      backgroundColor: event.isDone ? '#808080' : event.color || '#03dac6',
       borderRadius: '5px',
       opacity: 0.8,
       color: 'white',
@@ -198,6 +225,7 @@ const Calendar = () => {
           endAccessor="end"
           style={{ height: 'calc(100% - 300px)' }}
           eventPropGetter={eventStyleGetter}
+          onSelectEvent={(event) => handleMarkDone(event.id)}
         />
         <FormGroup>
           <FormControl

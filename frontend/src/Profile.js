@@ -124,19 +124,6 @@ const Profile = () => {
     }
   };
 
-  // const handleSave = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     await axios.post('http://localhost:5000/api/profile', {
-  //       userId: user.sub,
-  //       ...profileData,
-  //     });
-  //     alert('Profile updated successfully');
-  //   } catch (error) {
-  //     console.error('Error updating profile:', error);
-  //     alert('Failed to update profile');
-  //   }
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -150,8 +137,6 @@ const Profile = () => {
     } catch (error) {
       console.error('Error updating profile:', error);
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         console.error('Error data:', error.response.data);
         console.error('Error status:', error.response.status);
         console.error('Error headers:', error.response.headers);
@@ -165,6 +150,10 @@ const Profile = () => {
       alert('Failed to update profile');
     }
   };  
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   return (
     // <form onSubmit={handleSubmit}>
