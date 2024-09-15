@@ -11,6 +11,7 @@ import Chat from './Chat';
 import Layout from './Layout';
 import Calendar from './Calendar';
 import Report from './Report';
+import BDIQuestionnaire from './BDIQuestionnaire';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const App = () => {
@@ -33,6 +34,9 @@ const App = () => {
         <Route path="/dashboard" element={<Layout>< Dashboard/></Layout>} />
         <Route path="/calendar" element={<Layout><Calendar/></Layout>} />
         <Route path="/report" element={<Layout><Report/></Layout>} />
+        <Route path="/monthlyQuestionnaire" element={<Layout><BDIQuestionnaire/></Layout>} />
+
+        
       </Routes>
     </Router>
   );

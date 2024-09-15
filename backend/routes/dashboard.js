@@ -9,6 +9,7 @@ router.get('/:userId', async (req, res) => {
     const userId = req.params.userId;
     const dailyData = await DailyData.find({ userId }).sort({ date: -1 }).limit(30);
     const aggregatedData = await aggregateData(dailyData);
+    console.log("Sending dashboard data:", aggregatedData);
     res.status(200).json(aggregatedData);
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
@@ -23,6 +24,20 @@ async function aggregateData(dailyData) {
   const averageTime = await calculateAverageTime(dailyData);
   const chartData = await generateChartData(dailyData);
 
+  console.log("Aggregated data:", {
+    dataEntries,
+    happinessScale,
+    userEngagement,
+    averageTime,
+    chartDataSummary: {
+      labels: chartData.labels,
+      datasets: chartData.datasets.map(ds => ({
+        label: ds.label,
+        dataPoints: ds.data.length
+      }))
+    }
+  });
+
   return {
     dataEntries,
     happinessScale,
@@ -33,27 +48,23 @@ async function aggregateData(dailyData) {
 }
 
 async function calculateAverageHappiness(dailyData) {
-  // Implement your logic to calculate the average happiness score
-  // based on the "generalMood" field in the dailyData
-  // For example:
   const totalHappiness = dailyData.reduce((sum, day) => {
     switch (day.generalMood) {
-      case 'Bad':
+      case 'bad':
         return sum + 1;
-      case 'Okay':
+      case 'okay':
         return sum + 3;
-      case 'Good':
+      case 'good':
         return sum + 5;
       default:
         return sum;
     }
   }, 0);
-  // return Math.round((totalHappiness / dailyData.length) * 20);
-  return 75;
+  const result = Math.round((totalHappiness / dailyData.length) * 20);
+  return result;
 }
 
 async function calculateUserEngagement(dailyData) {
-  // Implement your logic to calculate user engagement
   // based on the frequency of daily data entries
   const daysWithData = dailyData.filter(day => day.sleep !== '').length;
   return Math.round((daysWithData / 30) * 100);
@@ -68,11 +79,18 @@ async function calculateAverageTime(dailyData) {
 }
 
 async function generateChartData(dailyData) {
-  // Implement your logic to generate the chart data
-  // based on the daily data entries
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+  dailyData.sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort dailyData by date
+
+  const labels = dailyData.map(day => new Date(day.date).toLocaleDateString());
+  const happinessData = dailyData.map(day => {
+    switch (day.generalMood.toLowerCase()) {
+      case 'bad': return 0;
+      case 'okay': return 50;
+      case 'good': return 100;
+      default: return 0;
+    }
+  });
   const dataEntries = [50, 60, 70, 80, 90, 100];
-  const happinessScale = [60, 65, 70, 75, 80, 85];
   const userEngagement = [70, 75, 80, 85, 90, 95];
   const averageTime = [0, 10, 20, 30];
 
@@ -87,7 +105,7 @@ async function generateChartData(dailyData) {
       },
       {
         label: 'Happiness Scale',
-        data: happinessScale,
+        data: happinessData,
         borderColor: '#1a535c',
         fill: false,
       },

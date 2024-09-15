@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const profileSchema = new mongoose.Schema({
   userId: String,
   age: Number,
+  grade: Number,
   weight: Number,
   bloodType: String,
   height: Number,

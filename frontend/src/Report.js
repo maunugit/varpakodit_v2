@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Chart } from 'chart.js';
 import 'chartjs-plugin-datalabels';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const ReportContainer = styled.div`
   max-width: 800px;
@@ -58,9 +60,61 @@ const FeedbackInput = styled.textarea`
   font-family: Arial, sans-serif;
 `;
 
-const Report = ({ studentData, habitData, eventData, reportDate }) => {
+const Report = ({reportDate }) => {
   const [showReport, setShowReport] = useState(false);
   const [feedback, setFeedback] = useState('');
+  const [studentData, setStudentData] = useState({
+    name: '',
+    age: '',
+    weight: '',
+    height: '',
+    grade: '',
+    attendance: 0, // calculate this separately
+  });
+
+  const [habitData, setHabitData] = useState([]);
+
+  const { user, isAuthenticated } = useAuth0();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isAuthenticated && user) {
+        try {
+          const response = await axios.get(`http://localhost:5000/api/profile/${user.sub}`);
+          if (response.data) {
+            setStudentData(prevData => ({
+              ...prevData,
+              name: user.name,
+              age: response.data.age,
+              weight: response.data.weight,
+              height: response.data.height,
+              grade: response.data.grade,
+              // attendance here if necessary
+            }));
+          }
+
+           // Fetch habit analysis
+          console.log('Fetching habit data for user:', user.sub);
+          const habitResponse = await axios.get(`http://localhost:5000/api/habits/analyze/${user.sub}`);
+          console.log('Habit data received:', habitResponse.data);
+          setHabitData(habitResponse.data);
+
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          if (error.response) {
+            console.error('Error response:', error.response.data);
+            console.error('Error status:', error.response.status);
+            console.error('Error headers:', error.response.headers);
+          } else if (error.request) {
+            console.error('Error request:', error.request);
+          } else {
+            console.error('Error message:', error.message);
+          }
+        }
+      }
+    };
+    fetchData();
+  }, [isAuthenticated, user]);
 
   const generatePDF = async () => {
     const doc = new jsPDF();
@@ -71,7 +125,7 @@ const Report = ({ studentData, habitData, eventData, reportDate }) => {
     // Title and Date
     doc.setFontSize(24);
     doc.setFont('helvetica', 'bold');
-    doc.text('VARPAKODDIT Student Report', pageWidth / 2, yOffset, { align: 'center' });
+    doc.text('VARPAKODIT Student Report', pageWidth / 2, yOffset, { align: 'center' });
     yOffset += 20;
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
@@ -114,12 +168,7 @@ const Report = ({ studentData, habitData, eventData, reportDate }) => {
     doc.setFont('helvetica', 'bold');
     doc.text('Events Attended', margin, yOffset);
     yOffset += 10;
-    eventData.forEach((event) => {
-      doc.text(`- ${event.date}: ${event.name}`, margin, yOffset);
-      yOffset += 10;
-    });
-    yOffset += 20;
-
+    
     // Additional Remarks
     doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
@@ -189,8 +238,9 @@ const Report = ({ studentData, habitData, eventData, reportDate }) => {
       <Button onClick={() => setShowReport(true)}>Generate Report</Button>
       {showReport && (
         <ReportContent>
-          <Title>VARPAKODDIT Student Report</Title>
+          <Title>VARPAKODIT Student Report</Title>
           <p><strong>Report Date:</strong> {reportDate}</p>
+
           <SectionTitle>Student Information</SectionTitle>
           <p><strong>Name:</strong> {studentData.name}</p>
           <p><strong>Age:</strong> {studentData.age}</p>
@@ -198,14 +248,12 @@ const Report = ({ studentData, habitData, eventData, reportDate }) => {
           <p><strong>Height:</strong> {studentData.height} cm</p>
           <p><strong>Grade:</strong> {studentData.grade}</p>
           <p><strong>Attendance:</strong> {studentData.attendance}%</p>
+
           <SectionTitle>Habit Analysis</SectionTitle>
           {habitData.map((habit, index) => (
             <p key={index}><strong>{habit.title}:</strong> {habit.value}</p>
           ))}
-          <SectionTitle>Events Attended</SectionTitle>
-          {eventData.map((event, index) => (
-            <p key={index}><strong>{event.date}:</strong> {event.name}</p>
-          ))}
+          
           <SectionTitle>Additional Remarks</SectionTitle>
           <p>This section can include any additional comments or insights.</p>
           <SectionTitle>User Feedback</SectionTitle>
@@ -218,37 +266,36 @@ const Report = ({ studentData, habitData, eventData, reportDate }) => {
 };
 
 // Example usage
-const studentData = {
-  name: 'John Doe',
-  age: 15,
-  weight: 60,
-  height: 170,
-  grade: '10th Grade',
-  attendance: 95,
-};
+// const studentData = {
+//   name: 'John Doe',
+//   age: 15,
+//   weight: 60,
+//   height: 170,
+//   grade: '10th Grade',
+//   attendance: 95,
+// };
 
-const habitData = [
-  { title: 'Sleep', value: '7 hours' },
-  { title: 'Eating', value: 'Balanced diet' },
-  { title: 'Hobbies', value: 'Reading, Gaming' },
-  { title: 'School', value: 'Good performance' },
-  { title: 'Sports', value: 'Soccer' },
-  { title: 'Friends and Family', value: 'Good relationships' },
-  { title: 'General Mood', value: 'Positive' },
-];
+// const habitData = [
+//   { title: 'Sleep', value: 'Good' },
+//   { title: 'Eating', value: 'Balanced diet' },
+//   { title: 'Hobbies', value: 'Reading, Gaming' },
+//   { title: 'School', value: 'Good performance' },
+//   { title: 'Friends and Family', value: 'Good relationships' },
+//   { title: 'General Mood', value: 'Positive' },
+// ];
 
-const eventData = [
-  { date: '2024-07-01', name: 'Science Fair' },
-  { date: '2024-07-15', name: 'Basketball Tournament' },
-  { date: '2024-07-20', name: 'School Play' },
-];
+// const eventData = [
+//   { date: '2024-07-01', name: 'Science Fair' },
+//   { date: '2024-07-15', name: 'Basketball Tournament' },
+//   { date: '2024-07-20', name: 'School Play' },
+// ];
 
 const reportDate = new Date().toLocaleDateString();
 
 const App = () => (
   <div>
     <h1>Student Reports</h1>
-    <Report studentData={studentData} habitData={habitData} eventData={eventData} reportDate={reportDate} />
+    <Report reportDate={reportDate} />
   </div>
 );
 

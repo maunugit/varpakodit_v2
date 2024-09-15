@@ -4,11 +4,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const OpenAI = require('openai');
+
+// routes
 const dailyDataRoutes = require('./routes/dailyData');
 const profileRoutes = require('./routes/profile');
 const userRoutes = require('./routes/users');
 const dashboardRoutes = require('./routes/dashboard');
-
+const habitRoutes = require('./routes/habitRoutes');
+const bdiQuestionnaireRouter = require('./routes/bdiQuestionnaire');
 
 dotenv.config();
 
@@ -17,10 +20,13 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
+
 app.use('/api/dailyData', dailyDataRoutes); 
 app.use('/api/profile', profileRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/habits', habitRoutes);
+app.use('/api/bdiQuestionnaire', bdiQuestionnaireRouter);
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -73,10 +79,8 @@ app.post('/message', async (req, res) => {
   if (!message || !thread_id) {
     return res.status(400).json({ error: "No message or thread ID provided" });
   }
-
   try {
     console.log(`Received message: ${message} for thread_id: ${thread_id}`);
-
     await openai.beta.threads.messages.create(thread_id, {
       role: "user",
       content: message,
@@ -85,7 +89,6 @@ app.post('/message', async (req, res) => {
     let run = await openai.beta.threads.runs.create(thread_id, {
       assistant_id: assistantId,
     });
-
     while (true) {
       run = await openai.beta.threads.runs.retrieve(thread_id, run.id);
       if (run.status === 'completed') {

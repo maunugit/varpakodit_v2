@@ -122,14 +122,40 @@ const AddButton = styled.button`
     cursor: not-allowed;
   }
 `;
+const EventPopover = styled.div`
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000;
+`;
+
+const PopoverButton = styled.button`
+  margin: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #6200ee;
+  color: white;
+  
+  &:hover {
+    background-color: #3700b3;
+  }
+`;
 
 const Calendar = () => {
   const [events, setEvents] = useState([]);
   const [title, setTitle] = useState('');
-  const [start, setStart] = useState('');
-  const [end, setEnd] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [endTime, setEndTime] = useState('');
   const [color, setColor] = useState('#03dac6');
   const [loading, setLoading] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0 });
   const { user } = useAuth0();
 
   useEffect(() => {
@@ -165,54 +191,87 @@ const Calendar = () => {
   //   setEvents(dummyEvents);
   // }, []);
 
+  const saveEvents = (updatedEvents) => {
+    const eventsToSave = updatedEvents.map(event => ({
+      ...event,
+      start: event.start.toISOString(),
+      end: event.end.toISOString()
+    }));
+    setEvents(updatedEvents);
+    localStorage.setItem(`calendarEvents_${user.sub}`, JSON.stringify(eventsToSave));
+  };
+
   const handleAddEvent = async (e) => {
     e.preventDefault();
-    if (!title || !start || !end || !color) return;
+    if (!title || !startDate || !startTime || !endDate || !endTime || !color) return;
 
     setLoading(true);
+    const start = new Date(`${startDate}T${startTime}`);
+    const end = new Date(`${endDate}T${endTime}`);
     try {
       const newEvent = {
         // id: events.length + 1,
         id: Date.now(),
         title,
-        start: new Date(start),
-        end: new Date(end),
+        start,
+        end,
         color,
       };
       const updatedEvents = [...events, newEvent];
       // setEvents([...events, newEvent]);
-      setEvents(updatedEvents);
-      localStorage.setItem(`calendarEvents_${user.sub}`, JSON.stringify(updatedEvents)); //save events to localStorage, can be changed to save to MongoDB for example
+      saveEvents(updatedEvents);
+      // localStorage.setItem(`calendarEvents_${user.sub}`, JSON.stringify(updatedEvents)); //save events to localStorage, can be changed to save to MongoDB for example
       setTitle('');
-      setStart('');
-      setEnd('');
+      setStartDate('');
+      setStartTime('');
+      setEndDate('');
+      setEndTime('');
       setColor('#03dac6');
+      setLoading(false);
     } catch (error) {
       console.error('Error adding event:', error);
     }
     setLoading(false);
   };
 
-  const handleMarkDone = (eventId) => {
-    const updatedEvents = events.map(event =>
-      event.id === eventId ? { ...event, isDone: true } : event
+  const handleSelectEvent = (event, e) => {
+    setSelectedEvent(event);
+    setPopoverPosition({ top: e.pageY, left: e.pageX });
+  };
+
+  const handleToggleComplete = () => {
+    const updatedEvents = events.map(event => 
+      event.id === selectedEvent.id 
+        ? { ...event, isCompleted: !event.isCompleted } 
+        : event
     );
-    setEvents(updatedEvents);
-    localStorage.setItem(`calendarEvents_${user.sub}`, JSON.stringify(updatedEvents));
+    saveEvents(updatedEvents);
+    setSelectedEvent(null);
+  };
+  const handleDeleteEvent = () => {
+    const updatedEvents = events.filter(event => event.id !== selectedEvent.id);
+    saveEvents(updatedEvents);
+    setSelectedEvent(null);
   }
 
-  const eventStyleGetter = (event, start, end, isSelected) => {
+  // const handleMarkDone = (eventId) => {
+  //   const updatedEvents = events.map(event =>
+  //     event.id === eventId ? { ...event, isDone: true } : event
+  //   );
+  //   setEvents(updatedEvents);
+  //   localStorage.setItem(`calendarEvents_${user.sub}`, JSON.stringify(updatedEvents));
+  // }
+
+  const eventStyleGetter = (event) => {
     const style = {
-      backgroundColor: event.isDone ? '#808080' : event.color || '#03dac6',
+      backgroundColor: event.isCompleted ? '#808080' : event.color || '#03dac6',
       borderRadius: '5px',
       opacity: 0.8,
       color: 'white',
       border: '0px',
       display: 'block'
     };
-    return {
-      style
-    };
+    return { style };
   };
 
   return (
@@ -225,8 +284,17 @@ const Calendar = () => {
           endAccessor="end"
           style={{ height: 'calc(100% - 300px)' }}
           eventPropGetter={eventStyleGetter}
-          onSelectEvent={(event) => handleMarkDone(event.id)}
+          onSelectEvent={handleSelectEvent}
         />
+        {selectedEvent && (
+          <EventPopover style={{ top: popoverPosition.top, left: popoverPosition.left }}>
+            <PopoverButton onClick={handleToggleComplete}>
+              {selectedEvent.isCompleted ? 'Mark as Incomplete' : 'Mark as Completed'}
+            </PopoverButton>
+            <PopoverButton onClick={handleDeleteEvent}>Delete Event</PopoverButton>
+            <PopoverButton onClick={() => setSelectedEvent(null)}>Close</PopoverButton>
+          </EventPopover>
+        )}
         <FormGroup>
           <FormControl
             type="text"
@@ -236,15 +304,27 @@ const Calendar = () => {
             disabled={loading}
           />
           <FormControl
-            type="datetime-local"
-            value={start}
-            onChange={(e) => setStart(e.target.value)}
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
             disabled={loading}
           />
           <FormControl
-            type="datetime-local"
-            value={end}
-            onChange={(e) => setEnd(e.target.value)}
+            type="time"
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+            disabled={loading}
+          />
+          <FormControl
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            disabled={loading}
+          />
+          <FormControl
+            type="time"
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
             disabled={loading}
           />
           <ColorInput

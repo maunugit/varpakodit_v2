@@ -68,6 +68,13 @@ const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const getHappinessInterpretation = (scale) => {
+    if (scale <= 20) return "Very Unhappy";
+    if (scale <= 40) return "Unhappy";
+    if (scale <= 60) return "Neutral";
+    if (scale <= 80) return "Happy";
+    return "Very Happy";
+  };
 
 
   useEffect(() => {
@@ -76,6 +83,7 @@ const Dashboard = () => {
         try {
           setIsLoading(true);
           const response = await axios.get(`http://localhost:5000/api/dashboard/${user.sub}`);
+          console.log("Raw dashboard data:", response.data);
           setDashboardData(response.data);
         } catch (error) {
           setError('Error fetching dashboard data');
@@ -109,11 +117,12 @@ const Dashboard = () => {
           </DashboardCard>
           
           <DashboardCard style={{ backgroundColor: cardColors[1] }}>
-            <Card.Body>
-              <Card.Title>Happiness Scale</Card.Title>
-              <Card.Text>{happinessScale}%</Card.Text>
-            </Card.Body>
-          </DashboardCard>
+          <Card.Body>
+            <Card.Title>Happiness Scale</Card.Title>
+            <Card.Text>{happinessScale}% - {getHappinessInterpretation(happinessScale)}</Card.Text>
+          </Card.Body>
+        </DashboardCard>
+
           <DashboardCard style={{ backgroundColor: cardColors[2] }}>
             <Card.Body>
               <Card.Title>User Engagement</Card.Title>

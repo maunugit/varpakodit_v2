@@ -73,6 +73,7 @@ const Profile = () => {
   const { user, isAuthenticated  } = useAuth0();
   const [profileData, setProfileData] = useState({
     age: '',
+    grade: '',
     weight: '',
     bloodType: '',
     height: '',
@@ -175,6 +176,13 @@ const Profile = () => {
             name="age"
             placeholder="Age"
             value={profileData.age}
+            onChange={handleInputChange}
+          />
+          <Input
+            type="number"
+            name="grade"
+            placeholder="Grade"
+            value={profileData.grade}
             onChange={handleInputChange}
           />
           <Input
