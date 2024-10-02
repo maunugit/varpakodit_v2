@@ -57,7 +57,7 @@ const Sidebar = () => {
       <SidebarButton onClick={() => navigate('/report')}>Download Report</SidebarButton>
       <SidebarButton onClick={() => navigate('/monthlyQuestionnaire')}>Fill Monthly Questionnaire</SidebarButton>
       <SidebarButton onClick={() => navigate('/settings')}>My Settings</SidebarButton>
-      <LogoutButton onClick={() => console.log('Logout')}>Log Out</LogoutButton>
+      <SidebarButton onClick={() => navigate('/logout')}>Log Out</SidebarButton>
     </SidebarContainer>
   );
 };

@@ -4,13 +4,21 @@ const dailyDataSchema = new mongoose.Schema({
   userId: String,
   userName: String, 
   date: { type: Date, default: Date.now },
-  sleep: String,
+  sleep: {
+    type: Number,
+    min: 1,
+    max: 5,
+    required: true,
+  },
   eating: String,
   hobbies: String,
   school: String,
-  sports: String,
   friendsFamily: String,
   generalMood: String,
+  outsideTime: String, 
+  hygiene: String, 
+  screenTime: Number, 
+  timeWithAdults: String, 
 });
 
 module.exports = mongoose.model('DailyData', dailyDataSchema);

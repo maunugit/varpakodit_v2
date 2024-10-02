@@ -94,15 +94,22 @@ const DailyDataForm = () => {
   const [formData, setFormData] = useState({
     sleep: '',
     eating: '',
-    hobbies: '',
     school: '',
-    sports: '',
+    hobbies: '',
     friendsFamily: '',
     generalMood: '',
+    outsideTime: '', 
+    hygiene: '', 
+    screenTime: '', 
+    timeWithAdults: '', 
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // if the field is sleep or screenTime, store it as a number
+    const parsedValue = 
+      name === 'sleep' || name === 'screenTime' ? Number(value) : value;
     setFormData({
       ...formData,
       [name]: value,
@@ -126,13 +133,21 @@ const DailyDataForm = () => {
   return (
     <FormContainer>
       <StyledForm onSubmit={handleSubmit}>
-        <FormGroup>
-          <FormLabel>Sleep</FormLabel>
-          <FormControl name="sleep" value={formData.sleep} onChange={handleChange}>
+      <FormGroup>
+          <FormLabel>Sleep (1-5)</FormLabel>
+          <FormControl
+            as="select"
+            name="sleep"
+            value={formData.sleep}
+            onChange={handleChange}
+            required
+          >
             <option value="">Select</option>
-            <option value="bad">Bad</option>
-            <option value="okay">Okay</option>
-            <option value="good">Good</option>
+            <option value="1">1 - Very Poor</option>
+            <option value="2">2 - Poor</option>
+            <option value="3">3 - Okay</option>
+            <option value="4">4 - Good</option>
+            <option value="5">5 - Excellent</option>
           </FormControl>
         </FormGroup>
         <FormGroup>
@@ -144,10 +159,7 @@ const DailyDataForm = () => {
             <option value="good">Good</option>
           </FormControl>
         </FormGroup>
-        <FormGroup>
-          <FormLabel>Hobbies</FormLabel>
-          <FormControlText type="text" name="hobbies" value={formData.hobbies} onChange={handleChange} />
-        </FormGroup>
+        
         <FormGroup>
           <FormLabel>School</FormLabel>
           <FormControl name="school" value={formData.school} onChange={handleChange}>
@@ -158,8 +170,8 @@ const DailyDataForm = () => {
           </FormControl>
         </FormGroup>
         <FormGroup>
-          <FormLabel>Sports</FormLabel>
-          <FormControl name="sports" value={formData.sports} onChange={handleChange}>
+          <FormLabel>Hobbies</FormLabel>
+          <FormControl name="hobbies" value={formData.hobbies} onChange={handleChange}>
             <option value="">Select</option>
             <option value="bad">Bad</option>
             <option value="okay">Okay</option>
@@ -178,6 +190,52 @@ const DailyDataForm = () => {
         <FormGroup>
           <FormLabel>General Mood</FormLabel>
           <FormControl name="generalMood" value={formData.generalMood} onChange={handleChange}>
+            <option value="">Select</option>
+            <option value="bad">Bad</option>
+            <option value="okay">Okay</option>
+            <option value="good">Good</option>
+          </FormControl>
+        </FormGroup>
+        {/* Outside Time */}
+        <FormGroup>
+          <FormLabel>Outside Time</FormLabel>
+          <FormControl name="outsideTime" value={formData.outsideTime} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Not at all">Not at all</option>
+            <option value="less than an hour">Less than an hour</option>
+            <option value="1-2 hours">1-2 hours</option>
+            <option value="3+ hours">3+ hours</option>
+          </FormControl>
+        </FormGroup>
+
+        {/* Hygiene */}
+        <FormGroup>
+          <FormLabel>Hygiene</FormLabel>
+          <FormControl name="hygiene" value={formData.hygiene} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="bad">Bad</option>
+            <option value="good">Good</option>
+          </FormControl>
+        </FormGroup>
+
+        {/* Screen Time */}
+        <FormGroup>
+          <FormLabel>Screen Time (hours)</FormLabel>
+          <FormControlText
+            type="number"
+            name="screenTime"
+            value={formData.screenTime}
+            onChange={handleChange}
+            placeholder="Enter hours"
+            min="0"
+            required
+          />
+        </FormGroup>
+
+        {/* Time Spent with Grown Ups/Personnel */}
+        <FormGroup>
+          <FormLabel>Time Spent with Grown Ups/Personnel</FormLabel>
+          <FormControl name="timeWithAdults" value={formData.timeWithAdults} onChange={handleChange} required>
             <option value="">Select</option>
             <option value="bad">Bad</option>
             <option value="okay">Okay</option>
