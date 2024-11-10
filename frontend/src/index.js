@@ -1,3 +1,5 @@
+//src/index.js
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -27,6 +29,7 @@ root.render(
       authorizationParams={{
         redirect_uri: window.location.origin,
         audience: audience,
+        scope: 'openid profile email',
       }}
       onRedirectCallback={onRedirectCallback} // Handle redirect after login
       cacheLocation="localstorage"  // Use localStorage for caching tokens

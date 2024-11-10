@@ -4,8 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const OpenAI = require('openai');
-const User = require('./models/User')
-
+// const User = require('./models/User');
 
 // routes
 const dailyDataRoutes = require('./routes/dailyData');
@@ -32,7 +31,6 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/habits', habitRoutes);
 app.use('/api/bdiQuestionnaire', bdiQuestionnaireRouter);
 app.use('/api/auth', authRoutes);
-// app.use('/api/admin', adminRoutes);
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -81,37 +79,37 @@ app.post('/start', async (req, res) => {
 });
 
 // Endpoint to initialize user
-app.post('/api/initUser', async (req, res) => {
-  const { userID, email } = req.body;
+// app.post('/api/initUser', async (req, res) => {
+//   const { userID, email } = req.body;
 
-  if (!userID || !email) {
-    return res.status(400).json({ message: 'Missing userID or email' });
-  }
+//   if (!userID || !email) {
+//     return res.status(400).json({ message: 'Missing userID or email' });
+//   }
 
-  try {
-    // Check if the user already exists
-    let user = await User.findOne({ auth0Id: userID });
+//   try {
+//     // Check if the user already exists
+//     let user = await User.findOne({ auth0Id: userID });
 
-    if (user) {
-      // User exists, no action needed
-      return res.status(200).json({ message: 'User already exists' });
-    }
+//     if (user) {
+//       // User exists, no action needed
+//       return res.status(200).json({ message: 'User already exists' });
+//     }
 
-    // Create a new user
-    user = new User({
-      auth0Id: userID,
-      email,
-      isAdmin: false, // Default value
-    });
+//     // Create a new user
+//     user = new User({
+//       auth0Id: userID,
+//       email,
+//       isAdmin: false, // Default value
+//     });
 
-    await user.save();
+//     await user.save();
 
-    return res.status(201).json({ message: 'User created successfully' });
-  } catch (error) {
-    console.error('Error initializing user:', error.message);
-    return res.status(500).json({ message: 'Server error' });
-  }
-});
+//     return res.status(201).json({ message: 'User created successfully' });
+//   } catch (error) {
+//     console.error('Error initializing user:', error.message);
+//     return res.status(500).json({ message: 'Server error' });
+//   }
+// });
 
 app.post('/message', async (req, res) => {
   const { message, thread_id } = req.body;

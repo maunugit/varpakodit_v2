@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom'; // Removed BrowserRouter
+import { Route, Routes, Navigate } from 'react-router-dom';
 import Profile from './Profile';
 import Dashboard from './Dashboard';
 import DailyDataForm from './DailyDataForm';
@@ -11,7 +11,7 @@ import Report from './Report';
 import BDIQuestionnaire from './BDIQuestionnaire';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
-import LandingPage from './LandingPage';  // Import the LandingPage component
+import LandingPage from './LandingPage'; 
 
 const ProtectedRoute = ({ isAdmin, userLoading, children }) => {
   if (userLoading) {
@@ -31,7 +31,7 @@ const App = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      if (isAuthenticated) {
+      if (isAuthenticated && user) {
         try {
           setUserLoading(true);
           const token = await getAccessTokenSilently();
@@ -51,7 +51,7 @@ const App = () => {
       }
     };
     fetchUser();
-  }, [isAuthenticated, getAccessTokenSilently]);
+  }, [isAuthenticated, getAccessTokenSilently, user]);
 
   useEffect(() => {
     const initializeUser = async () => {
@@ -81,12 +81,10 @@ const App = () => {
   }, [isAuthenticated, getAccessTokenSilently, user]);
 
   return (
-    // Removed the <Router> component
     <Routes>
-      {/* LandingPage is always accessible */}
       <Route path="/" element={<LandingPage />} />
 
-      {/* Protected routes - user must be authenticated to access them */}
+      {/* Protected routes */}
       <Route path="/main" element={isAuthenticated ? <Layout><MainScreen /></Layout> : <Navigate to="/" replace />} />
       <Route path="/daily-data" element={isAuthenticated ? <Layout><DailyDataForm /></Layout> : <Navigate to="/" replace />} />
       <Route path="/chat" element={isAuthenticated ? <Layout><Chat /></Layout> : <Navigate to="/" replace />} />
@@ -94,7 +92,7 @@ const App = () => {
       <Route path="/calendar" element={isAuthenticated ? <Layout><Calendar /></Layout> : <Navigate to="/" replace />} />
       <Route path="/monthlyQuestionnaire" element={isAuthenticated ? <Layout><BDIQuestionnaire /></Layout> : <Navigate to="/" replace />} />
 
-      {/* Admin Routes */}
+      {/* Admin routes */}
       <Route
         path="/dashboard"
         element={
@@ -112,7 +110,7 @@ const App = () => {
         }
       />
 
-      {/* Redirect unknown routes to home */}
+      {/* Catch-all route */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

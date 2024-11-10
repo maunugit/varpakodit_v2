@@ -61,9 +61,9 @@ const FeedbackInput = styled.textarea`
 `;
 
 const Report = ({reportDate }) => {
-  const [users, setUsers] = useState([])
-  const [selectedUserId, setSelectedUserId] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  // const [users, setUsers] = useState([])
+  // const [selectedUserId, setSelectedUserId] = useState(null);
+  // const [isAdmin, setIsAdmin] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [feedback, setFeedback] = useState('');
   const [studentData, setStudentData] = useState({
@@ -76,97 +76,48 @@ const Report = ({reportDate }) => {
 
   const [habitData, setHabitData] = useState([]);
 
-  const { user, isAuthenticated, getAccessTokenSilently  } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
 
   useEffect(() => {
     const fetchData = async () => {
       if (isAuthenticated && user) {
         try {
-          const token = await getAccessTokenSilently({
-            audience: 'YOUR_AUTH0_AUDIENCE',
-          });
-
-          // Fetch the logged-in user's data to check if they are an admin
-          const userResponse = await axios.get('http://localhost:5000/api/auth/me', {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          setIsAdmin(userResponse.data.isAdmin);
-
-          if (userResponse.data.isAdmin) {
-            // Fetch all users
-            const usersResponse = await axios.get('http://localhost:5000/api/users', {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-
-            setUsers(usersResponse.data);
+          const response = await axios.get(`http://localhost:5000/api/profile/${user.sub}`);
+          if (response.data) {
+            setStudentData(prevData => ({
+              ...prevData,
+              name: user.name,
+              age: response.data.age,
+              weight: response.data.weight,
+              height: response.data.height,
+              grade: response.data.grade,
+            }));
           }
 
-          // Set the default selected user ID
-          setSelectedUserId(user.sub);
+           // Fetch habit analysis
+          console.log('Fetching habit data for user:', user.sub);
+          const habitResponse = await axios.get(`http://localhost:5000/api/habits/analyze/${user.sub}`);
+          console.log('Habit data received:', habitResponse.data);
+          setHabitData(habitResponse.data);
 
-          // Fetch report data for the selected user
-          fetchReportData(token, user.sub);
         } catch (error) {
           console.error('Error fetching data:', error);
+          if (error.response) {
+            console.error('Error response:', error.response.data);
+            console.error('Error status:', error.response.status);
+            console.error('Error headers:', error.response.headers);
+          } else if (error.request) {
+            console.error('Error request:', error.request);
+          } else {
+            console.error('Error message:', error.message);
+          }
         }
       }
     };
-
     fetchData();
-  }, [isAuthenticated, user, getAccessTokenSilently]);
+  }, [isAuthenticated, user]);
 
-  const fetchReportData = async (token, userId) => {
-    try {
-      // Fetch profile data
-      const profileResponse = await axios.get(`http://localhost:5000/api/profile/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (profileResponse.data) {
-        setStudentData((prevData) => ({
-          ...prevData,
-          name: profileResponse.data.name || 'N/A',
-          age: profileResponse.data.age || 'N/A',
-          weight: profileResponse.data.weight || 'N/A',
-          height: profileResponse.data.height || 'N/A',
-          grade: profileResponse.data.grade || 'N/A',
-          // attendance here if necessary
-        }));
-      }
-
-      // Fetch habit analysis
-      const habitResponse = await axios.get(
-        `http://localhost:5000/api/habits/analyze/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setHabitData(habitResponse.data);
-    } catch (error) {
-      console.error('Error fetching report data:', error);
-    }
-  };
-
-  // Handle user selection change
-  const handleUserChange = (e) => {
-    const userId = e.target.value;
-    setSelectedUserId(userId);
-    getAccessTokenSilently({
-      audience: 'YOUR_AUTH0_AUDIENCE',
-    }).then((token) => {
-      fetchReportData(token, userId);
-    });
-  };
+  
 
   const generatePDF = async () => {
     const doc = new jsPDF();
@@ -281,22 +232,6 @@ const Report = ({reportDate }) => {
 
   return (
     <ReportContainer>
-      {isAdmin && (
-      <div>
-        <label htmlFor="user-select">Select User:</label>
-        <select
-          id="user-select"
-          value={selectedUserId}
-          onChange={handleUserChange}
-        >
-          {users.map((u) => (
-            <option key={u.auth0Id} value={u.auth0Id}>
-              {u.name || u.email}
-            </option>
-          ))}
-        </select>
-      </div>
-    )}
       <FeedbackInput
         placeholder="Enter your feedback here..."
         value={feedback}
