@@ -1,8 +1,5 @@
-// src/App.js
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import LoginButton from './LoginButton';
-import LogoutButton from './LogoutButton';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import Profile from './Profile';
 import Dashboard from './Dashboard';
 import DailyDataForm from './DailyDataForm';
@@ -12,9 +9,9 @@ import Layout from './Layout';
 import Calendar from './Calendar';
 import Report from './Report';
 import BDIQuestionnaire from './BDIQuestionnaire';
-import RBDIQuestionnaire from './RBDIQuestionnaire';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
+import LandingPage from './LandingPage'; 
 
 const ProtectedRoute = ({ isAdmin, userLoading, children }) => {
   if (userLoading) {
@@ -28,9 +25,6 @@ const ProtectedRoute = ({ isAdmin, userLoading, children }) => {
 };
 
 const App = () => {
-  // const { isAuthenticated, isLoading, error } = useAuth0();
-  // if (isLoading) return <div>Loading...</div>;
-  // if (error) return <div>Oops... {error.message}</div>;
   const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
   const [isAdmin, setIsAdmin] = useState(false);
   const [userLoading, setUserLoading] = useState(true);
@@ -40,19 +34,12 @@ const App = () => {
       if (isAuthenticated && user) {
         try {
           setUserLoading(true);
-          // Obtain the access token
           const token = await getAccessTokenSilently();
-  
-          // Make an authenticated request to the backend
           const response = await axios.get('http://localhost:5000/api/auth/me', {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-  
-          console.log('User data from backend:', response.data);
-  
-          // Set the isAdmin state
           setIsAdmin(response.data.isAdmin);
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -63,49 +50,69 @@ const App = () => {
         setUserLoading(false);
       }
     };
-  
     fetchUser();
   }, [isAuthenticated, getAccessTokenSilently, user]);
 
-  return (
-    <Router>
-      <div>
-        <LoginButton />
-        <LogoutButton />
-      </div>
-      <Routes>
-        <Route path="/" element={isAuthenticated ? <Layout><MainScreen /></Layout> : <Profile />} />
-        
-        <Route path="/daily-data" element={<Layout><DailyDataForm /></Layout>} />
-        <Route path="/chat" element={<Layout><Chat /></Layout>} />
-        <Route path="/profile" element={<Layout><Profile /></Layout>} />
-        <Route path="/calendar" element={<Layout><Calendar/></Layout>} />
-        <Route path="/monthlyQuestionnaire" element={<Layout><BDIQuestionnaire/></Layout>} />
-        <Route path="/logout" element={<Layout><LogoutButton/></Layout>} />
-        
-         {/* Admin Routes */}
-         <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute isAdmin={isAdmin}>
-              <Layout><Dashboard /></Layout>
-            </ProtectedRoute>
+  useEffect(() => {
+    const initializeUser = async () => {
+      if (isAuthenticated && user) {
+        const userData = {
+          userID: user.sub,
+          email: user.email,
+        };
+        try {
+          const token = await getAccessTokenSilently();
+          await axios.post('http://localhost:5000/api/initUser', userData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+        } catch (error) {
+          if (error.response && error.response.status === 200) {
+            console.log('User already exists.');
+          } else {
+            console.error('Error initializing user:', error);
           }
-        />
-        <Route
-          path="/report"
-          element={
-            <ProtectedRoute isAdmin={isAdmin}>
-              <Layout><Report /></Layout>
-            </ProtectedRoute>
-          }
-        />
+        }
+      }
+    };
+    initializeUser();
+  }, [isAuthenticated, getAccessTokenSilently, user]);
 
-        {/* Optional: Redirect unknown routes to home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-        
-      </Routes>
-    </Router>
+  return (
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+
+      {/* Protected routes */}
+      <Route path="/main" element={isAuthenticated ? <Layout><MainScreen /></Layout> : <Navigate to="/" replace />} />
+      <Route path="/daily-data" element={isAuthenticated ? <Layout><DailyDataForm /></Layout> : <Navigate to="/" replace />} />
+      <Route path="/chat" element={isAuthenticated ? <Layout><Chat /></Layout> : <Navigate to="/" replace />} />
+      <Route path="/profile" element={isAuthenticated ? <Layout><Profile /></Layout> : <Navigate to="/" replace />} />
+      <Route path="/calendar" element={isAuthenticated ? <Layout><Calendar /></Layout> : <Navigate to="/" replace />} />
+      <Route path="/monthlyQuestionnaire" element={isAuthenticated ? <Layout><BDIQuestionnaire /></Layout> : <Navigate to="/" replace />} />
+
+      {/* Admin routes */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute isAdmin={isAdmin} userLoading={userLoading}>
+            <Layout><Dashboard /></Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/report"
+        element={
+          <ProtectedRoute isAdmin={isAdmin} userLoading={userLoading}>
+            <Layout><Report /></Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Catch-all route */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 };
 

@@ -1,11 +1,11 @@
-// src/Sidebar.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAuth0 } from '@auth0/auth0-react';  // Import useAuth0 to handle logout
 
 const SidebarContainer = styled.div`
   height: 100vh;
-  width: 250px; /* Adjusted width for a more modern look */
+  width: 250px;
   position: fixed;
   top: 0;
   left: 0;
@@ -21,7 +21,7 @@ const SidebarContainer = styled.div`
 const SidebarButton = styled.button`
   margin: 10px 0;
   padding: 10px 20px;
-  width: calc(100% - 40px); /* Adjusted width for padding */
+  width: calc(100% - 40px);
   text-align: left;
   background: none;
   border: none;
@@ -46,6 +46,11 @@ const LogoutButton = styled(SidebarButton)`
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth0();  // Destructure logout from useAuth0
+
+  const handleLogout = () => {
+    logout({ returnTo: window.location.origin });  // Auth0 logout with redirection to landing page
+  };
 
   return (
     <SidebarContainer>
@@ -57,9 +62,11 @@ const Sidebar = () => {
       <SidebarButton onClick={() => navigate('/report')}>Download Report</SidebarButton>
       <SidebarButton onClick={() => navigate('/monthlyQuestionnaire')}>Fill Monthly Questionnaire</SidebarButton>
       <SidebarButton onClick={() => navigate('/settings')}>My Settings</SidebarButton>
-      <SidebarButton onClick={() => navigate('/logout')}>Log Out</SidebarButton>
+      
+      {/* Use the handleLogout function to log out */}
+      <LogoutButton onClick={handleLogout}>Log Out</LogoutButton>
     </SidebarContainer>
   );
 };
- 
+
 export default Sidebar;
