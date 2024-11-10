@@ -16,7 +16,7 @@ const bdiQuestionnaireSchema = new mongoose.Schema({
     enum: [
       'Normaali (0-12 pistettä)', 
       'Lievä masennus (13-18 pistettä)', 
-      'Kohtalainen tai keskivaikea masennus (19-29 pistettä', 
+      'Kohtalainen tai keskivaikea masennus (19-29 pistettä)', 
       'Vaikea masennus (30 pistettä tai yli)']
   }
 });

@@ -2,6 +2,7 @@ const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const User = require('../models/User');
 const dotenv = require('dotenv');
+const axios = require('axios');
 
 dotenv.config();
 
@@ -23,22 +24,31 @@ const checkJwt = jwt({
 
 // Middleware to handle user creation/updating
 const handleUser = async (req, res, next) => {
-  const { sub, email, name } = req.user; // 'sub' is the unique user ID in Auth0
+  try {
+    const accessToken = req.headers.authorization.split(' ')[1]; // Extract the token
+
+    // Fetch user profile from Auth0
+    const userInfoResponse = await axios.get(`https://${process.env.AUTH0_DOMAIN}/userinfo`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  
+    const { sub, email, name } = userInfoResponse.data;
 
   // Debugging: Log incoming user info
-  console.log('Authenticated user:', sub, email, name);
+    console.log('Authenticated user:', sub, email, name);
 
-  try {
-    // Find the user by Auth0 sub
+  // Find or create the user in the database
     let user = await User.findOne({ auth0Id: sub });
 
     if (!user) {
-      // If user does not exist, create a new one
+    // If user does not exist, create a new one
       user = new User({
         auth0Id: sub,
         email: email,
-        name: name || email, // Use name if available, else email
-        // role: 'user', // Default is 'user' as per schema
+        name: name || email,
+        isAdmin: false, // Default value
       });
 
       await user.save();
@@ -59,6 +69,6 @@ const handleUser = async (req, res, next) => {
     console.error('Error handling user:', error);
     res.status(500).send('Internal server error');
   }
-};
+  };
 
 module.exports = { checkJwt, handleUser };

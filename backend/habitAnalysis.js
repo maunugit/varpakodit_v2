@@ -131,8 +131,8 @@ function analyzeSingleHabit(scores, field) {
       okayThreshold = 1; // Average score >= 1
       break;
     case 'hygiene':
-      goodThreshold = 3; // Only 'good' or 'bad'
-      okayThreshold = 2; // No 'okay' in data
+      goodThreshold = 3;
+      okayThreshold = 2; 
       break;
     default:
       // For fields with scores from 1 to 3

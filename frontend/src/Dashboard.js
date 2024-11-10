@@ -76,7 +76,6 @@ const Dashboard = () => {
     return "Very Happy";
   };
 
-
   useEffect(() => {
     const fetchDashboardData = async () => {
       if (isAuthenticated && user) {

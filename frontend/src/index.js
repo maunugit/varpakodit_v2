@@ -1,5 +1,4 @@
 //src/index.js
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -21,6 +20,7 @@ root.render(
       authorizationParams={{
         redirect_uri: window.location.origin,
         audience: audience,
+        scope: 'openid profile email',
       }}
       cacheLocation="localstorage"  // Use localStorage for caching tokens
     >
