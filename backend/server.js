@@ -10,16 +10,17 @@ const OpenAI = require('openai');
 const dailyDataRoutes = require('./routes/dailyData');
 const profileRoutes = require('./routes/profile');
 const userRoutes = require('./routes/userRoutes');
-const dashboardRoutes = require('./routes/dashboard');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 const habitRoutes = require('./routes/habitRoutes');
 const bdiQuestionnaireRouter = require('./routes/bdiQuestionnaire');
+const rbdiQuestionnaireRouter = require('./routes/rbdiQuestionnaire');
 const authRoutes = require('./routes/auth');
 //const adminRoutes = require('./routes/admin');
 
 dotenv.config();
 
 const app = express();
-
+ 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
@@ -30,19 +31,27 @@ app.use('/api/users', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/habits', habitRoutes);
 app.use('/api/bdiQuestionnaire', bdiQuestionnaireRouter);
+app.use('/api/rbdiQuestionnaire', rbdiQuestionnaireRouter);
 app.use('/api/auth', authRoutes);
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+// mongoose.connect(process.env.MONGODB_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// }).then(() => console.log('MongoDB connected'))
+//   .catch(err => console.log(err));
+
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.VARPAKODIT_API_KEY,
 });
 
-const assistantId = "asst_tkvPdOllDHLHIyekcUra3Yhw"; // Varpakodit Botti
+// console.log("The right API KEY is:", process.env.VARPAKODIT_API_KEY);
+
+// const assistantId = "asst_tkvPdOllDHLHIyekcUra3Yhw"; // Maunun Botti
+const assistantId = "asst_4Fux8EcZM4vObTXSamREVGcy"; // Varpakotien Botti
 
 // Utility function to handle tool calls
 const handleToolCalls = async (required_action) => {
@@ -77,39 +86,6 @@ app.post('/start', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-// Endpoint to initialize user
-// app.post('/api/initUser', async (req, res) => {
-//   const { userID, email } = req.body;
-
-//   if (!userID || !email) {
-//     return res.status(400).json({ message: 'Missing userID or email' });
-//   }
-
-//   try {
-//     // Check if the user already exists
-//     let user = await User.findOne({ auth0Id: userID });
-
-//     if (user) {
-//       // User exists, no action needed
-//       return res.status(200).json({ message: 'User already exists' });
-//     }
-
-//     // Create a new user
-//     user = new User({
-//       auth0Id: userID,
-//       email,
-//       isAdmin: false, // Default value
-//     });
-
-//     await user.save();
-
-//     return res.status(201).json({ message: 'User created successfully' });
-//   } catch (error) {
-//     console.error('Error initializing user:', error.message);
-//     return res.status(500).json({ message: 'Server error' });
-//   }
-// });
 
 app.post('/message', async (req, res) => {
   const { message, thread_id } = req.body;

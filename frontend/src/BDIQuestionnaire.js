@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const FormContainer = styled.div`
   display: flex;
@@ -256,6 +257,7 @@ const questions = [
 ];
 
 const BDIQuestionnaire = () => {
+  const { t } = useTranslation();
   const { user } = useAuth0();
   const [answers, setAnswers] = useState({});
 
@@ -286,7 +288,7 @@ const BDIQuestionnaire = () => {
   return (
     <FormContainer>
       <StyledForm onSubmit={handleSubmit}>
-        <h2>BDI-kysely</h2>
+      <h2>{t('bdi_questionnaire')}</h2>
         {questions.map((question) => (
           <FormGroup key={question.id}>
             <FormLabel>{question.id}.</FormLabel>

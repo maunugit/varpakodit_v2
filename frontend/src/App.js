@@ -9,9 +9,11 @@ import Layout from './Layout';
 import Calendar from './Calendar';
 import Report from './Report';
 import BDIQuestionnaire from './BDIQuestionnaire';
+import RBDIQuestionnaire from './RBDIQuestionnaire';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import LandingPage from './LandingPage'; 
+import Settings from './Settings'; 
 
 const ProtectedRoute = ({ isAdmin, userLoading, children }) => {
   if (userLoading) {
@@ -53,33 +55,6 @@ const App = () => {
     fetchUser();
   }, [isAuthenticated, getAccessTokenSilently, user]);
 
-  useEffect(() => {
-    const initializeUser = async () => {
-      if (isAuthenticated && user) {
-        const userData = {
-          userID: user.sub,
-          email: user.email,
-        };
-        try {
-          const token = await getAccessTokenSilently();
-          await axios.post('http://localhost:5000/api/initUser', userData, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-        } catch (error) {
-          if (error.response && error.response.status === 200) {
-            console.log('User already exists.');
-          } else {
-            console.error('Error initializing user:', error);
-          }
-        }
-      }
-    };
-    initializeUser();
-  }, [isAuthenticated, getAccessTokenSilently, user]);
-
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
@@ -91,6 +66,8 @@ const App = () => {
       <Route path="/profile" element={isAuthenticated ? <Layout><Profile /></Layout> : <Navigate to="/" replace />} />
       <Route path="/calendar" element={isAuthenticated ? <Layout><Calendar /></Layout> : <Navigate to="/" replace />} />
       <Route path="/monthlyQuestionnaire" element={isAuthenticated ? <Layout><BDIQuestionnaire /></Layout> : <Navigate to="/" replace />} />
+      <Route path="/rbdiQuestionnaire" element={isAuthenticated ? <Layout><RBDIQuestionnaire /></Layout> : <Navigate to="/" replace />} />
+      <Route path="/settings" element={isAuthenticated ? <Layout><Settings /></Layout> : <Navigate to="/" replace />} />
 
       {/* Admin routes */}
       <Route

@@ -66,196 +66,136 @@ const questions = [
   {
     id: 1,
     options: [
-      { value: 0, text: "En ole surullinen" },
-      { value: 1, text: "Olen alakuloinen ja surullinen" },
-      { value: 2, text: "Olen tuskastumiseen asti surullinen ja alakuloinen" },
-      { value: 3, text: "Olen niin onneton, etten enää kestä" }
+      { value: 0, text: "Mielialani on melko valoisa ja hyvä" },
+      { value: 1, text: "En ole alakuloinen tai surullinen" },
+      { value: 2, text: "Tunnen itseni alakuloiseksi ja surulliseksi" },
+      { value: 3, text: "Olen alakuloinen jatkuvasti, enkä pääse siitä yli" },
+      { value: 4, text: "Olen niin masentunut ja alavireinen, etten kestä enää" }
     ]
   },
   {
     id: 2,
     options: [
-      { value: 0, text: "Tulevaisuus ei masenna eikä pelota minua " },
-      { value: 1, text: "Tulevaisuus pelottaa minua " },
-      { value: 2, text: "Minusta tuntuu, ettei tulevaisuudella ole tarjottavanaan minulle juuri mitään " },
-      { value: 3, text: "Minusta tuntuu, että tulevaisuus on toivoton. En jaksa uskoa, että asiat muuttuvat tästä parempaan päin" }
+      { value: 0, text: "Suhtaudun tulevaisuuteen toiveikkaasti" },
+      { value: 1, text: "En suhtaudu tulevaisuuteen toivottomasti" },
+      { value: 2, text: "Tulevaisuus tuntuu minusta melko masentavalta" },
+      { value: 3, text: "Minusta tuntuu, ettei minulla ole tulevaisuudelta mitään odotettavaa" },
+      { value: 4, text: "Tulevaisuus tuntuu minusta toivottomalta. En jaksa uskoa, että asiat muuttuisivat parempaan päin" }
     ]
   },
   {
     id: 3,
     options: [
-      { value: 0, text: "En tunne epäonnistuneeni " },
-      { value: 1, text: "Minusta tuntuu, että olen epäonnistunut useammin kuin muut ihmiset " },
-      { value: 2, text: "Elämäni on tähän saakka ollut vain sarja epäonnistumisia " },
-      { value: 3, text: "Minusta tuntuu, että olen täysin epäonnistunut ihmisenä " }
+      { value: 0, text: "Olen elämässäni onnistunut huomattavan usein" },
+      { value: 1, text: "En tunne epäonnistuneeni elämässä" },
+      { value: 2, text: "Minusta tuntuu, että olen epäonnistunut pyrkimyksissäni tavallista useammin" },
+      { value: 3, text: "Elämäni on tähän saakka ollut vain sarja epäonnistumisia" },
+      { value: 4, text: "Tunnen epäonnistuneeni täydellisesti ihmisenä" }
     ]
   },
   {
     id: 4,
     options: [
-      { value: 0, text: "En ole erityisen haluton" },
-      { value: 1, text: "En osaa nauttia asioista niin kuin ennen " },
-      { value: 2, text: "Minusta tuntuu, etten saa tyydytystä juuri mistään" },
-      { value: 3, text: "Olen haluton ja tyytymätön kaikkeen" }
+      { value: 0, text: "Olen varsin tyytyväinen elämääni" },
+      { value: 1, text: "En ole erityisen tyytyväinen" },
+      { value: 2, text: "En nauti asioista samalla tavoin kuin ennen" },
+      { value: 3, text: "Minusta tuntuu, etten saa enää tyydytystä juuri mistään" },
+      { value: 4, text: "Olen täysin tyytymätön kaikkeen" }
     ]
   },
   {
     id: 5,
     options: [
-      { value: 0, text: "En tunne erityisemmin syyllisyyttä" },
-      { value: 1, text: "Minusta tuntuu, että olen aika huono ja kelvoton" },
-      { value: 2, text: "Nykyään tunnen itseni huonoksi ja kelvottomaksi melkein aina" },
-      { value: 3, text: "Tunnen olevani erittäin huono ja arvoton" }
+      { value: 0, text: "Tunnen itseni melko hyväksi" },
+      { value: 1, text: "En tunne itseäni huonoksi ja arvottomaksi" },
+      { value: 2, text: "Tunnen itseni huonoksi ja arvottomaksi melko usein" },
+      { value: 3, text: "Nykyään tunnen itseni arvottomaksi melkein aina" },
+      { value: 4, text: "Olen kerta kaikkiaan huono ja arvoton" }
     ]
   },
   {
     id: 6,
     options: [
-      { value: 0, text: "En koe, että minua rangaistaan" },
-      { value: 1, text: "Tunnen, että jotain pahaa voi sattua minulle" },
-      { value: 2, text: "Uskon, että kohtalo rankaisee minua" },
-      { value: 3, text: "Tunnen, että olen tehnyt sellaista, josta minua on syytäkin rangaista" }
+      { value: 0, text: "Olen tyytyväinen itseeni ja suorituksiini" },
+      { value: 1, text: "En ole pettynyt itseni suhteen" },
+      { value: 2, text: "Olen pettynyt itseni suhteen" },
+      { value: 3, text: "Minua inhottaa itseni" },
+      { value: 4, text: "Vihaan itseäni" }
     ]
   },
   {
     id: 7,
     options: [
-      { value: 0, text: "En ole pettynyt itseeni" },
-      { value: 1, text: "Olen pettynyt itseeni " },
-      { value: 2, text: "Inhoan itseäni" },
-      { value: 3, text: "Vihaan itseäni" }
+      { value: 0, text: "Minulla ei ole koskaan ollut itsemurha-ajatuksia" },
+      { value: 1, text: "En ajattele, enkä halua vahingoittaa itseäni" },
+      { value: 2, text: "Minusta tuntuu, että olisi parempi, jos olisin kuollut" },
+      { value: 3, text: "Minulla on tarkat suunnitelmat itsemurhasta" },
+      { value: 4, text: "Tekisin itsemurhan, jos siihen olisi mahdollisuus" }
     ]
   },
   {
     id: 8,
     options: [
-      { value: 0, text: "Tunnen, että olen yhtä hyvä kuin muutkin" },
-      { value: 1, text: "Kritisoin itseäni heikkouksista" },
-      { value: 2, text: "Moitin itseäni virheistäni " },
-      { value: 3, text: "Moitin itseäni kaikesta, mikä 'menee pieleen'" }
+      { value: 0, text: "Pidän ihmisten tapaamisesta ja juttelemisesta" },
+      { value: 1, text: "En ole menettänyt kiinnostusta muihin ihmisiin" },
+      { value: 2, text: "Toiset ihmiset eivät enää kiinnosta minua niin paljon kuin ennen" },
+      { value: 3, text: "Olen melkein menettänyt mielenkiintoni sekä tunteeni toisia ihmisiä kohtaan" },
+      { value: 4, text: "Olen menettänyt mielenkiintoni muihin ihmisiin, enkä välitä heistä lainkaan" }
     ]
   },
   {
     id: 9,
     options: [
-      { value: 0, text: "En ole ajatellut vahingoittaa itseäni" },
-      { value: 1, text: "Olen joskus ajatellut itseni vahingoittamista, mutten kuitenkaan tee niin " },
-      { value: 2, text: "Mielessäni on selvät itsemurhasuunnitelmat " },
-      { value: 3, text: "Tapan itseni, kun siihen tulee tilaisuus" }
+      { value: 0, text: "Erilaisten päätösten tekeminen on minulle helppoa" },
+      { value: 1, text: "Pystyn tekemään päätöksiä samoin kuin ennenkin" },
+      { value: 2, text: "Varmuuteni on vähentynyt, ja yritän lykätä päätöksen tekoa" },
+      { value: 3, text: "Minulla on suuria vaikeuksia päätösten teossa" },
+      { value: 4, text: "En pysty enää lainkaan tekemään ratkaisuja ja päätöksiä" }
     ]
   },
   {
     id: 10,
     options: [
-      { value: 0, text: "En itke tavallista enempää" },
-      { value: 1, text: "Itken nykyään aiempaa enemmän" },
-      { value: 2, text: "Itken nykyään jatkuvasti" },
-      { value: 3, text: "En kykene enää itkemään, vaikka haluaisin" }
+      { value: 0, text: "Olen melko tyytyväinen ulkonäkööni ja olemukseeni" },
+      { value: 1, text: "Ulkonäössäni ei ole minua haittaavia piirteitä" },
+      { value: 2, text: "Olen huolissani siitä, että näytän epämiellyttävältä" },
+      { value: 3, text: "Minusta tuntuu, että näytän rumalta" },
+      { value: 4, text: "Olen varma, että näytän rumalta ja vastenmieliseltä" }
     ]
   },
   {
     id: 11,
     options: [
-      { value: 0, text: "En ole sen ärtyneempi kuin ennenkään" },
-      { value: 1, text: "Ärsyynnyn aiempaa herkemmin" },
-      { value: 2, text: "Tunnen, että olen ärtynyt koko ajan" },
-      { value: 3, text: "Minua eivät enää liikuta asiat, joista aiemmin raivostuin" }
+      { value: 0, text: "Minulla ei ole nukkumisessa minkäänlaisia vaikeuksia" },
+      { value: 1, text: "Nukun yhtä hyvin kuin ennenkin" },
+      { value: 2, text: "Herätessäni aamuisin olen paljon väsyneempi kuin ennen" },
+      { value: 3, text: "Minua haittaa unettomuus" },
+      { value: 4, text: "Kärsin unettomuudesta, nukahtamisvaikeuksista tai liian aikaisesta kesken unien heräämisestä" }
     ]
   },
   {
     id: 12,
     options: [
-      { value: 0, text: "Olen edelleen kiinnostunut muista ihmisistä" },
-      { value: 1, text: "Muut kiinnostavat minua aiempaa vähemmän " },
-      { value: 2, text: "Kiinnostukseni ja tunteeni muita kohtaan ovat miltei kadonneet " },
-      { value: 3, text: "Olen menettänyt kaiken mielenkiintoni muita kohtaan, enkä välitä heistä enää lainkaan" }
+      { value: 0, text: "Väsyminen on minulle lähes täysin vierasta" },
+      { value: 1, text: "En väsy helpommin kuin tavallisestikaan" },
+      { value: 2, text: "Väsyn helpommin kuin ennen" },
+      { value: 3, text: "Vähäinen työ väsyttää ja uuvuttaa minua" },
+      { value: 4, text: "Olen liian väsynyt tehdäkseni mitään" }
     ]
   },
   {
     id: 13,
     options: [
-      { value: 0, text: "Pystyn tekemään päätöksiä, kuten ennenkin" },
-      { value: 1, text: "Yritän lykätä päätöksentekoa" },
-      { value: 2, text: "Minun on hyvin vaikeata tehdä päätöksiä" },
-      { value: 3, text: "En pysty enää lainkaan tekemään päätöksiä" }
+      { value: 0, text: "Ruokahalussani ei ole mitään hankaluuksia" },
+      { value: 1, text: "Ruokahaluni on ennallaan" },
+      { value: 2, text: "Ruokahaluni on huonompi kuin ennen" },
+      { value: 3, text: "Ruokahaluni on nyt paljon huonompi kuin ennen" },
+      { value: 4, text: "Minulla ei ole enää lainkaan ruokahalua" }
     ]
-  },
-  {
-    id: 14,
-    options: [
-      { value: 0, text: "Mielestäni ulkonäköni ei ole muuttunut" },
-      { value: 1, text: "Olen huolissani siitä, että näytän vanhalta tai etten näytä miellyttävältä" },
-      { value: 2, text: "Minusta tuntuu, että ulkonäköni on muuttunut pysyvästi niin, etten näytä miellyttävältä " },
-      { value: 3, text: "Tunnen olevani ruma ja vastenmielisen näköinen" }
-    ]
-  },
-  {
-    id: 15,
-    options: [
-      { value: 0, text: "Työkykyni on säilynyt ennallaan" },
-      { value: 1, text: "Työn aloittaminen vaatii minulta ylimääräisiä ponnistuksia " },
-      { value: 2, text: "Saadakseni aikaan jotakin minun on suorastaan pakotettava itseni siihen " },
-      { value: 3, text: "En kykene lainkaan tekemään työtä" }
-    ]
-  },
-  {
-    id: 16,
-    options: [
-      { value: 0, text: "Nukun yhtä hyvin kuin ennen" },
-      { value: 1, text: "Olen aamuisin väsyneempi kuin ennen " },
-      { value: 2, text: "Herään nykyisin 1-2 tuntia normaalia aikaisemmin enkä nukahda enää uudelleen " },
-      { value: 3, text: "Herään aikaisin joka aamu, enkä pysty nukkumaan viittä tuntia pitempään yhtäjaksoisesti " }
-    ]
-  },
-  {
-    id: 17,
-    options: [
-      { value: 0, text: "En väsy sen nopeammin kuin ennen" },
-      { value: 1, text: "Väsyn nopeammin kuin ennen " },
-      { value: 2, text: "Väsyn lähes tyhjästä" },
-      { value: 3, text: "Olen liian väsynyt tehdäkseni mitään" }
-    ]
-  },
-  {
-    id: 18,
-    options: [
-      { value: 0, text: "Ruokahaluni on ennallaan" },
-      { value: 1, text: "Ruokahaluni on huonompi kuin ennen" },
-      { value: 2, text: "Ruokahaluni on nyt paljon huonompi kuin ennen" },
-      { value: 3, text: "Minulla ei ole lainkaan ruokahalua" }
-    ]
-  },
-  {
-    id: 19,
-    options: [
-      { value: 0, text: "Painoni on pysynyt viime aikoina ennallaan" },
-      { value: 1, text: "Olen laihtunut yli 2,5 kg" },
-      { value: 2, text: "Olen laihtunut yli 5 kg" },
-      { value: 3, text: "Olen laihtunut yli 7,5 kg" }
-    ]
-  },
-  {
-    id: 20,
-    options: [
-      { value: 0, text: "En ajattele terveyttäni tavallista enempää" },
-      { value: 1, text: "Kiinnitän tavallista enemmän huomiota särkyihin ja kipuihin, vatsavaivoihin ja ummetukseen " },
-      { value: 2, text: "Tarkkailen ruumiintuntemuksiani niin paljon, ettei muille ajatuksille jää aikaa " },
-      { value: 3, text: "Terveyteni ja tuntemusteni ajatteleminen on kokonaan vallannut mieleni " }
-    ]
-  },
-  {
-    id: 21,
-    options: [
-      { value: 0, text: "Kiinnostukseni sukupuolielämään on pysynyt ennallaan" },
-      { value: 1, text: "Kiinnostukseni sukupuolielämään on vähentynyt " },
-      { value: 2, text: "Kiinnostukseni sukupuolielämään on huomattavasti vähäisempää kuin aikaisemmin " },
-      { value: 3, text: "Olen menettänyt kaiken mielenkiintoni sukupuolielämään " }
-    ]
-  },
-  
+  }
 ];
 
-const BDIQuestionnaire = () => {
+const RBDIQuestionnaire = () => {
   const { user } = useAuth0();
   const [answers, setAnswers] = useState({});
 
@@ -279,7 +219,7 @@ const BDIQuestionnaire = () => {
       alert('BDI questionnaire submitted successfully');
     } catch (error) {
       console.error(error);
-      alert('Failed to submit BDI questionnaire');
+      alert('Failed to submit R-BDI questionnaire');
     }
   };
 
@@ -312,4 +252,4 @@ const BDIQuestionnaire = () => {
   );
 };
 
-export default BDIQuestionnaire;
+export default RBDIQuestionnaire;

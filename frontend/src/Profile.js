@@ -3,6 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'styled-components';
 import Sidebar from './Sidebar';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 // Styled components
 const ProfileContainer = styled.div`
@@ -70,6 +71,7 @@ const SaveButton = styled.button`
 `;
 
 const Profile = () => {
+  const { t } = useTranslation();
   const { user, isAuthenticated  } = useAuth0();
   const [profileData, setProfileData] = useState({
     age: '',
@@ -233,7 +235,7 @@ const Profile = () => {
             value={profileData.bio}
             onChange={handleInputChange}
           />
-          <SaveButton onClick={handleSubmit}>Save Changes</SaveButton>
+          <SaveButton onClick={handleSubmit}>{t('save_changes')}</SaveButton>
           {/* <SaveButton>Save Changes</SaveButton> */}
         </ProfileContent>
       </ProfileContainer>

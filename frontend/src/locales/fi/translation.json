@@ -1,0 +1,58 @@
+{
+    "welcome": "Tervetuloa sovellukseemme",
+    "settings": "Asetukset",
+    "select_language": "Valitse kieli",
+    "english": "Englanti",
+    "finnish": "Suomi",
+    "submit": "Lähetä",
+    "bdi_questionnaire": "BDI-kysely",
+    "save_changes": "Tallenna",
+    "select": "Valitse",
+    "sleep": "Uni (1-5)",
+    "sleep_very_poor": "1 - Todella huono",
+    "sleep_poor":"2 - Huono",
+    "sleep_okay": "3 - Kohtalainen",
+    "sleep_good": "4 - Hyvä",
+    "sleep_excellent": "5 - Erinomainen",
+    "bad": "Huono",
+    "okay": "Kohtalainen",
+    "good": "Hyvä",
+    "excellent": "Erinomainen",
+    "eating": "Syöminen",
+    "school": "Koulu",
+    "hobbies": "Harrastukset",
+    "friends_and_family": "Perhe ja ystävät",
+    "general_mood": "Yleinen fiilis",
+    "outside_time": "Ulkoilu",
+    "hygiene": "Hygienia",
+    "screen_time": "Ruutu-aika (tunteina)",
+    "time_with_grownups": "Aikuisten kanssa vietetty aika",
+    "generate_report": "Luo raportti",
+    "report_title": "VARPAKODIT käyttäjäraportti",
+    "report_date": "Päivämäärä",
+    "student_information": "Opiskelijan tiedot",
+    "habit_analysis": "Käyttäjän analyysi",
+    "habitTitles": {
+      "sleep": "Uni",
+      "eating": "Syöminen",
+      "hobbies": "Harrastukset",
+      "school": "Koulu",
+      "friendsFamily": "Ystävät ja perhe",
+      "generalMood": "Yleinen mieliala",
+      "outsideTime": "Ulkona vietetty aika",
+      "hygiene": "Hygienia",
+      "screenTime": "Ruudun ääressä vietetty aika",
+      "timeWithAdults": "Aikuisten kanssa vietetty aika"
+    },
+    "habitValues": {
+    "Good": "Hyvä",
+    "Okay": "Kohtalainen",
+    "Needs Improvement": "Tarvitsee parannusta",
+    "No data": "Ei tietoja"
+  },
+  "no_additional_remarks": "Ei annettuja lisätietoja"
+
+
+
+  }
+  

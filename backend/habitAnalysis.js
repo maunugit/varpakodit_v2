@@ -25,6 +25,18 @@ async function analyzeHabits(userId) {
       screenTime: [],
       timeWithAdults: [],
     };
+    // const habitScores = {
+    //   sleep: [],
+    //   eating: [],
+    //   hobbies: [],
+    //   school: [],
+    //   friendsFamily: [],
+    //   generalMood: [],
+    //   outsideTime: [],
+    //   hygiene: [],
+    //   screenTime: [],
+    //   timeWithAdults: [],
+    // };
 
     // Map field values to scores and collect scores
     dailyData.forEach((day) => {
@@ -46,7 +58,8 @@ async function analyzeHabits(userId) {
 
     // Format the result
     return Object.entries(habitSummary).map(([key, value]) => ({
-      title: formatTitle(key),
+      // title: formatTitle(key),
+      key,
       value,
     }));
   } catch (error) {

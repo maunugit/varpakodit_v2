@@ -7,6 +7,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { BrowserRouter } from 'react-router-dom'; // Only one <BrowserRouter>
+import './i18n'; 
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n';
 
 const domain = process.env.REACT_APP_AUTH0_DOMAIN;
 const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
@@ -35,7 +38,9 @@ root.render(
       cacheLocation="localstorage"  // Use localStorage for caching tokens
     >
       <BrowserRouter> {/* This is the only Router needed */}
-        <App />
+        <I18nextProvider i18n={i18n}>
+          <App />
+        </I18nextProvider>
       </BrowserRouter>
     </Auth0Provider>
   </React.StrictMode>

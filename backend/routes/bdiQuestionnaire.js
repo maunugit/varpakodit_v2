@@ -38,13 +38,16 @@ router.post('/', async (req, res) => {
   }
 });
 
-// router.get('/:userId', async (req, res) => {
-//   try {
-//     const data = await BDIQuestionnaire.find({ userId: req.params.userId }).sort({ date: -1 });
-//     res.status(200).send(data);
-//   } catch (error) {
-//     res.status(400).send(error);
-//   }
-// });
 
+// tämä oli kommentoituna, oliko joku syy?
+router.get('/:userId', async (req, res) => {
+  try {
+    const data = await BDIQuestionnaire.find({ userId: req.params.userId })
+      .sort({ date: -1 })
+      .limit(30); // Optional: limit to last 30 entries
+    res.status(200).send(data);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
 module.exports = router;

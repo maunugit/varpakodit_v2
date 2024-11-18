@@ -61,6 +61,7 @@ const Sidebar = () => {
       <SidebarButton onClick={() => navigate('/calendar')}>Calendar</SidebarButton>
       <SidebarButton onClick={() => navigate('/report')}>Download Report</SidebarButton>
       <SidebarButton onClick={() => navigate('/monthlyQuestionnaire')}>Fill Monthly Questionnaire</SidebarButton>
+      <SidebarButton onClick={() => navigate('/rbdiQuestionnaire')}>Fill R-BDI Questionnaire</SidebarButton>
       <SidebarButton onClick={() => navigate('/settings')}>My Settings</SidebarButton>
       
       {/* Use the handleLogout function to log out */}

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const FormContainer = styled.div`
   display: flex;
@@ -90,6 +91,7 @@ const SubmitButton = styled.button`
 
 
 const DailyDataForm = () => {
+  const { t } = useTranslation();
   const { user } = useAuth0();
   const [formData, setFormData] = useState({
     sleep: '',
@@ -134,7 +136,7 @@ const DailyDataForm = () => {
     <FormContainer>
       <StyledForm onSubmit={handleSubmit}>
       <FormGroup>
-          <FormLabel>Sleep (1-5)</FormLabel>
+          <FormLabel>{t('sleep')}</FormLabel>
           <FormControl
             as="select"
             name="sleep"
@@ -142,85 +144,80 @@ const DailyDataForm = () => {
             onChange={handleChange}
             required
           >
-            <option value="">Select</option>
-            <option value="1">1 - Very Poor</option>
-            <option value="2">2 - Poor</option>
-            <option value="3">3 - Okay</option>
-            <option value="4">4 - Good</option>
-            <option value="5">5 - Excellent</option>
+            <option value="">{t('select')}</option>
+            <option value="1">{t('sleep_very_poor')}</option>
+            <option value="2">{t('sleep_poor')}</option>
+            <option value="3">{t('sleep_okay')}</option>
+            <option value="4">{t('sleep_good')}</option>
+            <option value="5">{t('sleep_excellent')}</option>
           </FormControl>
         </FormGroup>
         <FormGroup>
-          <FormLabel>Eating</FormLabel>
+          <FormLabel>{t('eating')}</FormLabel>
           <FormControl name="eating" value={formData.eating} onChange={handleChange}>
-            <option value="">Select</option>
-            <option value="bad">Bad</option>
-            <option value="okay">Okay</option>
-            <option value="good">Good</option>
+          <option value="">{t('select')}</option>
+            <option value="bad">{t('bad')}</option>
+            <option value="okay">{t('okay')}</option>
+            <option value="good">{t('good')}</option>
           </FormControl>
         </FormGroup>
         
         <FormGroup>
-          <FormLabel>School</FormLabel>
+          <FormLabel>{t('school')}</FormLabel>
           <FormControl name="school" value={formData.school} onChange={handleChange}>
-            <option value="">Select</option>
-            <option value="bad">Bad</option>
-            <option value="okay">Okay</option>
-            <option value="good">Good</option>
+          <option value="">{t('select')}</option>
+            <option value="bad">{t('bad')}</option>
+            <option value="okay">{t('okay')}</option>
+            <option value="good">{t('good')}</option>
           </FormControl>
         </FormGroup>
         <FormGroup>
-          <FormLabel>Hobbies</FormLabel>
+          <FormLabel>{t('hobbies')}</FormLabel>
           <FormControl name="hobbies" value={formData.hobbies} onChange={handleChange}>
-            <option value="">Select</option>
-            <option value="bad">Bad</option>
-            <option value="okay">Okay</option>
-            <option value="good">Good</option>
+          <option value="">{t('select')}</option>
+            <option value="bad">{t('bad')}</option>
+            <option value="okay">{t('okay')}</option>
+            <option value="good">{t('good')}</option>
           </FormControl>
         </FormGroup>
         <FormGroup>
-          <FormLabel>Friends and Family</FormLabel>
+          <FormLabel>{t('friends_and_family')}</FormLabel>
           <FormControl name="friendsFamily" value={formData.friendsFamily} onChange={handleChange}>
-            <option value="">Select</option>
-            <option value="bad">Bad</option>
-            <option value="okay">Okay</option>
-            <option value="good">Good</option>
+          <option value="">{t('select')}</option>
+            <option value="bad">{t('bad')}</option>
+            <option value="okay">{t('okay')}</option>
+            <option value="good">{t('good')}</option>
           </FormControl>
         </FormGroup>
         <FormGroup>
-          <FormLabel>General Mood</FormLabel>
+          <FormLabel>{t('general_mood')}</FormLabel>
           <FormControl name="generalMood" value={formData.generalMood} onChange={handleChange}>
-            <option value="">Select</option>
-            <option value="bad">Bad</option>
-            <option value="okay">Okay</option>
-            <option value="good">Good</option>
+          <option value="">{t('select')}</option>
+            <option value="bad">{t('bad')}</option>
+            <option value="okay">{t('okay')}</option>
+            <option value="good">{t('good')}</option>
           </FormControl>
         </FormGroup>
-        {/* Outside Time */}
         <FormGroup>
-          <FormLabel>Outside Time</FormLabel>
+          <FormLabel>{t('outside_time')}</FormLabel>
           <FormControl name="outsideTime" value={formData.outsideTime} onChange={handleChange} required>
-            <option value="">Select</option>
+            <option value="">{t('select')}</option>
             <option value="Not at all">Not at all</option>
             <option value="less than an hour">Less than an hour</option>
             <option value="1-2 hours">1-2 hours</option>
             <option value="3+ hours">3+ hours</option>
           </FormControl>
         </FormGroup>
-
-        {/* Hygiene */}
         <FormGroup>
-          <FormLabel>Hygiene</FormLabel>
+          <FormLabel>{t('hygiene')}</FormLabel>
           <FormControl name="hygiene" value={formData.hygiene} onChange={handleChange} required>
-            <option value="">Select</option>
-            <option value="bad">Bad</option>
-            <option value="good">Good</option>
+          <option value="">{t('select')}</option>
+            <option value="bad">{t('bad')}</option>
+            <option value="good">{t('good')}</option>
           </FormControl>
         </FormGroup>
-
-        {/* Screen Time */}
         <FormGroup>
-          <FormLabel>Screen Time (hours)</FormLabel>
+          <FormLabel>{t('screen_time')}</FormLabel>
           <FormControlText
             type="number"
             name="screenTime"
@@ -231,19 +228,17 @@ const DailyDataForm = () => {
             required
           />
         </FormGroup>
-
-        {/* Time Spent with Grown Ups/Personnel */}
         <FormGroup>
-          <FormLabel>Time Spent with Grown Ups/Personnel</FormLabel>
+          <FormLabel>{t('time_with_grownups')}</FormLabel>
           <FormControl name="timeWithAdults" value={formData.timeWithAdults} onChange={handleChange} required>
-            <option value="">Select</option>
-            <option value="bad">Bad</option>
-            <option value="okay">Okay</option>
-            <option value="good">Good</option>
+            <option value="">{t('select')}</option>
+            <option value="bad">{t('bad')}</option>
+            <option value="okay">{t('okay')}</option>
+            <option value="good">{t('good')}</option>
           </FormControl>
         </FormGroup>
         <ButtonContainer>
-          <SubmitButton type="submit">Submit</SubmitButton>
+          <SubmitButton type="submit">{t('submit')}</SubmitButton>
         </ButtonContainer>
       </StyledForm>
     </FormContainer>
