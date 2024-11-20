@@ -1,8 +1,0 @@
-bootstrap
-axios
-react
-react-dom
-react-router-dom
-react-scripts
-web-vitals
-@auth0/auth0-react
