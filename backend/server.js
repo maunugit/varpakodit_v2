@@ -22,11 +22,13 @@ dotenv.config();
 const app = express();
  
 app.use(cors({
-  origin: "https://varpakodit-frontend-service.onrender.com",
+  origin: 'https://varpakodit-frontend-service.onrender.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+  exposedHeaders: ['Authorization']
 }));
-
+app.options('*', cors()); // enable pre-flight for all routes
 app.use(bodyParser.json());
 app.use(express.json());
 
