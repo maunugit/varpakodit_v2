@@ -3,6 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import styled from 'styled-components';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
+import api from './api/axios';
 
 // Styled Components
 const DashboardContainer = styled.div`

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Sidebar from './Sidebar';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import api from './api/axios';
 
 // Styled components
 const ProfileContainer = styled.div`
