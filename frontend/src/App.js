@@ -37,11 +37,12 @@ const App = () => {
         try {
           setUserLoading(true);
           const token = await getAccessTokenSilently();
-          const response = await axios.get('http://localhost:5000/api/auth/me', {
+          const response = await api.get('/api/auth/me', {
             headers: {
               Authorization: `Bearer ${token}`,
-            },
+            }
           });
+          
           setIsAdmin(response.data.isAdmin);
         } catch (error) {
           console.error('Error fetching user data:', error);

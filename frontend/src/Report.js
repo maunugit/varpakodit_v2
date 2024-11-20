@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useTranslation } from 'react-i18next';
+import api from '../api/axios';
 
 
 ChartJS.register(
@@ -107,7 +108,7 @@ const Report = ({ reportDate }) => {
     const fetchUsers = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await axios.get('http://localhost:5000/api/users', {
+        const response = await api.get('/api/users', {
           headers: {
             Authorization: `Bearer ${token}`
           }

@@ -94,7 +94,7 @@ const Dashboard = () => {
     const fetchUsers = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await axios.get('http://localhost:5000/api/users', {
+        const response = await api.get('/api/users', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -121,8 +121,8 @@ const Dashboard = () => {
 
         // Fetch data using your existing routes
         const [dailyData, bdiData] = await Promise.all([
-          axios.get(`http://localhost:5000/api/dailyData/${selectedUserId}`, { headers }),
-          axios.get(`http://localhost:5000/api/bdiQuestionnaire/${selectedUserId}`, { headers })
+          api.get(`/api/dailyData/${selectedUserId}`, { headers }),
+          api.get(`/api/bdiQuestionnaire/${selectedUserId}`, { headers })
         ]);
 
         // Process the data

@@ -210,7 +210,7 @@ const RBDIQuestionnaire = () => {
     e.preventDefault();
     try {
       const totalScore = Object.values(answers).reduce((sum, value) => sum + value, 0);
-      await axios.post('http://localhost:5000/api/rbdiQuestionnaire', {
+      await api.post('/api/rbdiQuestionnaire', {
         userId: user.sub,
         userName: user.name,
         answers,

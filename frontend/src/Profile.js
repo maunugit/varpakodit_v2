@@ -90,7 +90,7 @@ const Profile = () => {
     const fetchProfileData = async () => {
       if (isAuthenticated && user) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/profile/${user.sub}`);
+          const response = await api.get(`/api/profile/${user.sub}`);
           if (response.data) {
             setProfileData(prevData => ({
               ...prevData,

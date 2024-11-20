@@ -21,7 +21,12 @@ dotenv.config();
 
 const app = express();
  
-app.use(cors());
+app.use(cors({
+  origin: "https://varpakodit-frontend-service.onrender.com",
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
+
 app.use(bodyParser.json());
 app.use(express.json());
 

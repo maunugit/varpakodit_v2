@@ -121,7 +121,7 @@ const DailyDataForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try { 
-      await axios.post('http://localhost:5000/api/dailyData', {
+      await api.post('/api/dailyData', {
         userId: user.sub,
         ...formData,
       });
