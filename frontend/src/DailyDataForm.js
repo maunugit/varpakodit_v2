@@ -9,23 +9,26 @@ import api from './api/axios';
 const FormContainer = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start; // Changed from center
+  min-height: 100vh; // Changed from height: 100vh
   background-color: #f0f2f5;
   font-family: 'Arial', sans-serif;
+  padding: 2rem 1rem; // Add some padding
+  overflow-y: auto; // Enable scrolling if needed
 `;
 
 const StyledForm = styled.form`
   background-color: #ffffff;
-  padding: 40px;
+  padding: 2rem; // Changed from 40px to be responsive
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 500px;
+  margin: 1rem auto; // Add margin to ensure spacing
 `;
 
 const FormGroup = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 1rem; // Changed from 20px to be responsive
 `;
 
 const FormLabel = styled.label`
@@ -37,10 +40,10 @@ const FormLabel = styled.label`
 
 const FormControl = styled.select`
   width: 100%;
-  padding: 12px;
+  padding: 0.75rem; // Changed from 12px to be responsive
   border: 1px solid #ced4da;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 1rem; // Changed from 16px to be responsive
   color: #495057;
   background-color: #ffffff;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -54,10 +57,10 @@ const FormControl = styled.select`
 
 const FormControlText = styled.input`
   width: 100%;
-  padding: 12px;
+  padding: 0.75rem;
   border: 1px solid #ced4da;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 1rem;
   color: #495057;
   background-color: #ffffff;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -72,16 +75,17 @@ const FormControlText = styled.input`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 1rem; // Changed from 20px
 `;
 
+
 const SubmitButton = styled.button`
-  padding: 12px 20px;
+  padding: 0.75rem 1.25rem; // Changed from px values
   border: none;
   border-radius: 4px;
   background-color: #007bff;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 

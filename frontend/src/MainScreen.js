@@ -39,8 +39,8 @@ const MainScreen = () => {
     <MainContainer>
       <Sidebar />
       <ContentContainer>
-        <WelcomeMessage>Welcome!</WelcomeMessage>
-        <SubMessage>Select from the sidebar to get started:</SubMessage>
+        <WelcomeMessage>Tervetuloa!</WelcomeMessage>
+        <SubMessage>Sivupalkista löytyy sovelluksen eri osat:</SubMessage>
       </ContentContainer>
     </MainContainer>
   );

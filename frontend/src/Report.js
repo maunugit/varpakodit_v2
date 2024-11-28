@@ -133,7 +133,7 @@ const Report = ({ reportDate }) => {
 
           // Get user's profile data
           const profileResponse = await axios.get(
-            `http://localhost:5000/api/profile/${selectedUserId}`,
+            `/api/profile/${selectedUserId}`,
             { headers }
           );
           
@@ -153,7 +153,7 @@ const Report = ({ reportDate }) => {
           // Fetch habit data
           try {
             const habitResponse = await axios.get(
-              `http://localhost:5000/api/habits/analyze/${selectedUserId}`,
+              `/api/habits/analyze/${selectedUserId}`,
               { headers }
             );
             setHabitData(habitResponse.data);
@@ -380,7 +380,7 @@ const Report = ({ reportDate }) => {
           </ReportContent>
         </>
       ) : (
-        <p>Select a user to generate a report</p>
+        <p>Valitse käyttäjä josta haluat tehdä raportin</p>
       )}
     </ReportContainer>
   );
@@ -391,7 +391,7 @@ const reportDate = new Date().toLocaleDateString();
 
 const App = () => (
   <div>
-    <h1>Student Reports</h1>
+    <h1>Käyttäjäraportit</h1>
     <Report reportDate={reportDate} />
   </div>
 );
