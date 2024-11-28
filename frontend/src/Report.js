@@ -132,10 +132,7 @@ const Report = ({ reportDate }) => {
           };
 
           // Get user's profile data
-          const profileResponse = await axios.get(
-            `/api/profile/${selectedUserId}`,
-            { headers }
-          );
+          const profileResponse = await api.get(`/api/profile/${selectedUserId}`, { headers });
           
           const selectedUser = users.find(u => u.auth0Id === selectedUserId);
           
@@ -150,20 +147,23 @@ const Report = ({ reportDate }) => {
             }));
           }
 
-          // Fetch habit data
-          try {
-            const habitResponse = await axios.get(
-              `/api/habits/analyze/${selectedUserId}`,
-              { headers }
-            );
-            setHabitData(habitResponse.data);
-          } catch (habitError) {
-            console.error('Error fetching habit data:', habitError);
-            setHabitData([]);
-          }
+          // Fetch habit analysis
+          console.log('Fetching habit data for user:', selectedUserId);
+          const habitResponse = await api.get(`/api/habits/analyze/${selectedUserId}`, { headers });
+          console.log('Habit data received:', habitResponse.data);
+          setHabitData(habitResponse.data);
 
         } catch (error) {
           console.error('Error fetching data:', error);
+          if (error.response) {
+            console.error('Error response:', error.response.data);
+            console.error('Error status:', error.response.status);
+            console.error('Error headers:', error.response.headers);
+          } else if (error.request) {
+            console.error('Error request:', error.request);
+          } else {
+            console.error('Error message:', error.message);
+          }
           setStudentData({
             name: '',
             age: '',
@@ -171,12 +171,13 @@ const Report = ({ reportDate }) => {
             height: '',
             grade: '',
           });
+          setHabitData([]);
         }
       }
     };
 
     fetchData();
-  }, [selectedUserId, users, getAccessTokenSilently]);
+}, [selectedUserId, users, getAccessTokenSilently]);
 
   // Handler for user selection
   const handleUserChange = (event) => {
